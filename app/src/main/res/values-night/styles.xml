@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="bigText_bold"></style>
+
+    <style name="placeHolderInput"></style>
+
+    <style name="input"></style>
+</resources>

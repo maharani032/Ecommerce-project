@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ecommerce</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email">email</string>
+    <string name="daftar">Daftar</string>
+    <string name="belum_punya_akun">Belum punya akun?</string>
+    <string name="password">password</string>
 </resources>

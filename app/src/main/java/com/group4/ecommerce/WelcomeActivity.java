@@ -81,35 +81,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     Log.i("login","login sucess");
                     checkRole(auth.getUid());
-//                    reference.child("Users").child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                            Boolean admin= (Boolean) snapshot.child("admin").getValue();
-//                            Boolean staff= (Boolean) snapshot.child("staff").getValue();
-//
-//                            Log.i("login", String.valueOf(admin));
-//                            if(admin==true && staff==false){
-////                                pindah halaman admin
-//                                Log.i("login", "halaman admin");
-//
-//                            }
-//                            else if(admin==false && staff==false){
-////                                pindah ke halaman user
-//                                Log.i("login", "halaman user");
-//
-//                            }
-//                            else if(staff==true && admin==false){
-////                                pindah ke halaman staff
-//                                Log.i("login", "halaman staff");
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
+
                 }
             }
         });

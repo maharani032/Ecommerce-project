@@ -5,4 +5,23 @@
     <string name="daftar">Daftar</string>
     <string name="belum_punya_akun">Belum punya akun?</string>
     <string name="password">password</string>
+    <string name="title_activity_admin">AdminActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+
+    <string name="staff">Staff</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="stock">Stock</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fullname">Fullname</string>
+    <string name="register_staff">Register Staff</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="nama">Nama</string>
 </resources>

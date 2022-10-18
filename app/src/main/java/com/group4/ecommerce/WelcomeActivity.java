@@ -48,7 +48,6 @@ public class WelcomeActivity extends AppCompatActivity {
         buttonSignIn=findViewById(R.id.buttonlogin);
         daftar=findViewById(R.id.daftar);
         pb=findViewById(R.id.pb);
-        pb.setVisibility(View.GONE);
         database= FirebaseDatabase.getInstance();
         reference=database.getReference();
         firebaseStorage= FirebaseStorage.getInstance();
@@ -96,6 +95,9 @@ public class WelcomeActivity extends AppCompatActivity {
         reference.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.child("admin").exists()){
+                    FirebaseAuth.getInstance().signOut();
+                }
                 Boolean admin= (Boolean) snapshot.child("admin").getValue();
                 Boolean staff= (Boolean) snapshot.child("staff").getValue();
 
@@ -109,13 +111,20 @@ public class WelcomeActivity extends AppCompatActivity {
                 else if(admin==false && staff==false){
 //                                pindah ke halaman user
                     Log.i("login", "halaman user");
+                    pb.setVisibility(View.INVISIBLE);
+
 
 
                 }
                 else if(staff==true && admin==false){
 //                                pindah ke halaman staff
                     Log.i("login", "halaman staff");
+                    pb.setVisibility(View.INVISIBLE);
 
+
+                }
+                else{
+                    FirebaseAuth.getInstance().signOut();
                 }
 
             }
@@ -129,8 +138,9 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("login","on start");
         FirebaseUser user=auth.getCurrentUser();
-        if(user!=null){
+        if(user!= null){
             checkRole(user.getUid());
         }
     }

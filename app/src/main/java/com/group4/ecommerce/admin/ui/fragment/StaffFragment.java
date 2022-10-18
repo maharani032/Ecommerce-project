@@ -2,22 +2,51 @@ package com.group4.ecommerce.admin.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.group4.ecommerce.admin.AddStaffActivity;
+import com.group4.ecommerce.admin.adapter.StaffAdapter;
+import com.group4.ecommerce.admin.model.Staff;
 import com.group4.ecommerce.databinding.FragmentStaffBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StaffFragment extends Fragment {
+    String fullname,email,staffPicture;
+    Staff staff;
+    RecyclerView rv;
+
+    FirebaseAuth auth;
+    FirebaseUser user;
+    DatabaseReference reference;
+    FirebaseDatabase database;
+
     FloatingActionButton fabStaff;
-    RecyclerView rvStaff;
     private FragmentStaffBinding binding;
+
+    List<Staff> listStaff= new ArrayList<>();
+    List<String> listKEY=new ArrayList<>();
+
+    List<String> list;
+    StaffAdapter staffAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -25,7 +54,6 @@ public class StaffFragment extends Fragment {
         binding = FragmentStaffBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         fabStaff=binding.fabStaff;
-        rvStaff=binding.rvStaff;
 
         fabStaff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,8 +62,65 @@ public class StaffFragment extends Fragment {
                 startActivity(addStaff);
             }
         });
+
         return root;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rv= binding.rvStaff;
+        rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
+//        binding.rvStaff.setAdapter(staffAdapter);
+        auth= FirebaseAuth.getInstance();
+        user= auth.getCurrentUser();
+        database= FirebaseDatabase.getInstance();
+        reference= database.getReference();
+
+        reference.child("Staffs").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                TODO: MENAMPILKAN DATA STAFF
+                for (DataSnapshot keys:snapshot.getChildren()){
+                    Staff staff=keys.getValue(Staff.class);
+                    String key= keys.getKey();
+                    listKEY.add(key);
+                    Log.d("staff", "User name: " + staff.getFullname().toString() + ", email " + staff.getEmail());
+                    staffAdapter=new StaffAdapter(listKEY,staff.getFullname(),staff.getEmail(),staff.getImage(),getContext());
+
+                    rv.setAdapter(staffAdapter);
+                }
+
+
+//                Log.i("staff",staff.getFullname());
+//                staffAdapter=new StaffAdapter(listKEY,staff.getFullname(),staff.getEmail(),staff.getImage(),getContext());
+//binding.rvStaff.setAdapter(staffAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+public void getStaffs(){
+    reference.child("Staffs").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            String key= snapshot.getKey();
+            list.add(key);
+            staffAdapter.notifyDataSetChanged();
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
+}
 
     @Override
     public void onDestroyView() {

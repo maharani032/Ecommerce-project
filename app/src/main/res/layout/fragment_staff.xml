@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".admin.ui.fragment.StaffFragment">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_staff"
+        android:id="@+id/rvStaff"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

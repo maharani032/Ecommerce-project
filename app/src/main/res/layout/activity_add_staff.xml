@@ -1,9 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".admin.AddStaffActivity">
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:defaultFocusHighlightEnabled="true"
+        />
+    <LinearLayout
+        android:id="@+id/navbar_add_staff"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green_700"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_baseline_arrow_back_ios_new_24"
+            android:contentDescription="go back"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/text_navbar"
+            android:text="Add Staff"
+            />
+    </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/navbar_add_staff"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ic_baseline_person_24"
+        android:contentDescription="upload picture"
+        android:id="@+id/staffpicture"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/field_email"
+        android:layout_below="@+id/staffpicture"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="43dp"
+        android:layout_marginHorizontal="16dp"
+        >
+
+        <TextView
+            android:id="@+id/emailPlaceHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:lineSpacingExtra="-3sp"
+            android:text="@string/email"
+            android:textAppearance="@style/placeHolderInput"
+            android:layout_marginBottom="7dp"
+            />
+        <!--        input email-->
+        <RelativeLayout
+            android:layout_below="@+id/emailPlaceHolder"
+            android:id="@+id/field_input_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inputfield"
+            >
+
+            <EditText
+                android:id="@+id/input_email"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/frame_165"
+                android:drawableStart="@drawable/ic_baseline_email_24"
+                android:drawablePadding="10dp"
+                android:hint="name@email.com"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                tools:ignore="TextContrastCheck" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/field_fullname"
+        android:layout_below="@+id/field_email"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        >
+
+        <TextView
+            android:id="@+id/fullname_placeHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:lineSpacingExtra="-3sp"
+            android:text="@string/fullname"
+            android:textAppearance="@style/placeHolderInput"
+            android:layout_marginBottom="7dp"
+            />
+        <RelativeLayout
+            android:layout_below="@+id/fullname_placeHolder"
+            android:id="@+id/field_input_fullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inputfield"
+            >
+
+            <EditText
+                android:id="@+id/input_fullname"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/frame_165"
+                android:drawableStart="@drawable/ic_baseline_person_24"
+                android:drawablePadding="10dp"
+                android:hint="xxxxxxxxxxx"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minHeight="48dp"
+                tools:ignore="TextContrastCheck" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_below="@+id/field_fullname"
+        android:id="@+id/field_password"
+        >
+
+        <TextView
+            android:id="@+id/passwordPlaceHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:lineSpacingExtra="-3sp"
+            android:text="@string/password"
+            android:textAppearance="@style/placeHolderInput"
+            android:layout_marginBottom="7dp"
+            />
+        <!--        input email-->
+        <RelativeLayout
+            android:layout_below="@+id/passwordPlaceHolder"
+            android:id="@+id/field_input_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inputfield"
+            >
+
+            <EditText
+                android:id="@+id/input_password"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/frame_165"
+                android:drawableStart="@drawable/ic_baseline_lock_24"
+                android:drawablePadding="10dp"
+                android:hint="******"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                tools:ignore="TextContrastCheck" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:id="@+id/btnAddStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_large"
+        android:text="@string/register_staff"
+        android:textColor="@color/white"
+        tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+</RelativeLayout>

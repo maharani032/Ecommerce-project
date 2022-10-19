@@ -1,7 +1,6 @@
 package com.group4.ecommerce.admin;
 
 import android.Manifest;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -34,7 +33,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.group4.ecommerce.R;
-import com.group4.ecommerce.WelcomeActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -64,8 +62,6 @@ public class AddStaffActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
         RegisterActivityForUploadImage();
-
-
         auth= FirebaseAuth.getInstance();
         database= FirebaseDatabase.getInstance();
         reference=database.getReference();
@@ -83,12 +79,9 @@ public class AddStaffActivity extends AppCompatActivity {
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getFragmentManager().getBackStackEntryCount() > 0) {
-                    getFragmentManager().popBackStack();
-                }
-                else {
-                    AddStaffActivity.super.onBackPressed();
-                }
+                Intent i=new Intent();
+                setResult(RESULT_CANCELED);
+                finish();
             }
         });
         addStaff.setOnClickListener(new View.OnClickListener() {
@@ -99,9 +92,7 @@ public class AddStaffActivity extends AppCompatActivity {
                 String fullname=inputFullname.getText().toString();
                     if(!email.isEmpty() && !password.isEmpty()) {
                         RegisterStaff(email,password,fullname);
-                        auth.signOut();
-                        Intent i=new Intent(AddStaffActivity.this, WelcomeActivity.class);
-                        startActivity(i);
+
                     }
                 else if(password.length()<=5) Toast.makeText(AddStaffActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
                 else Toast.makeText(AddStaffActivity.this,"Please Input Your Email,Fullname and Password",Toast.LENGTH_SHORT).show();
@@ -127,32 +118,20 @@ public class AddStaffActivity extends AppCompatActivity {
             activityResultLauncherForUploadImage.launch(i);
         }
     }
-    public void selesai(){
-        FragmentManager fm = getFragmentManager();
-        if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-//        FirebaseAuth.getInstance().signOut();
-//        Intent i= new Intent(AddStaffActivity.this, WelcomeActivity.class);
-//        startActivity(i);
 
-    }
     public void RegisterStaff(String email, String password, String fullname){
+        //        TODO: double login krn buat create user ketika masih login
+
         pb.setVisibility(View.VISIBLE);
-        auth.signOut();
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     reference.child("Users").child(auth.getUid()).child("email").setValue(email);
-//                    reference.child("Users").child(auth.getUid()).child("fullname").setValue(fullname);
+                    reference.child("Users").child(auth.getUid()).child("fullname").setValue(fullname);
 //                        role=> user,staff,admin
                     reference.child("Users").child(auth.getUid()).child("admin").setValue(false);
                     reference.child("Users").child(auth.getUid()).child("staff").setValue(true);
-
-
                     if(imageControl){
                         UUID randomId= UUID.randomUUID();
                         String imageName = "StaffPicture/"+ randomId + " - "+fullname+".jpg";
@@ -164,13 +143,16 @@ public class AddStaffActivity extends AppCompatActivity {
                                 myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        imagePath=uri.toString();
-                                        reference.child("Staffs").child(auth.getUid()).child("image").setValue(imagePath).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(AddStaffActivity.this,"success kirim gambar",Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        Intent i =new Intent();
+                                        i.putExtra("email",email);
+                                        i.putExtra("fullname",fullname);
+                                        i.putExtra("id",auth.getUid());
+                                        i.putExtra("image",uri.toString());
+                                        setResult(RESULT_OK,i);
+                                        finish();
+
+//                                        reference.child("Staffs").child(auth.getUid()).child("image").setValue("null");
+
                                     }
                                 });
                             }
@@ -181,11 +163,28 @@ public class AddStaffActivity extends AppCompatActivity {
 
                             }
                         });
+                    }
+                    else if(!imageControl){
+                        Intent i =new Intent();
+                        i.putExtra("email",email);
+                        i.putExtra("fullname",fullname);
+                        i.putExtra("id",auth.getUid());
+                        i.putExtra("image","null");
+                        setResult(RESULT_OK,i);
+                        auth.signOut();
+                        finish();
+
 
                     }
-                    reference.child("Staffs").child(auth.getUid()).child("fullname").setValue(fullname);
-                    reference.child("Staffs").child(auth.getUid()).child("email").setValue(email);
-                    reference.child("Staffs").child(auth.getUid()).child("image").setValue("null");
+
+
+//                    reference.child("Staffs").child(auth.getUid()).child("fullname").setValue(fullname);
+//                    reference.child("Staffs").child(auth.getUid()).child("email").setValue(email);
+//                    if(!imageControl){
+//                        reference.child("Staffs").child(auth.getUid()).child("image").setValue("null");
+//                        imagePath="null";
+//                    }
+
 
 
                 }
@@ -196,8 +195,6 @@ public class AddStaffActivity extends AppCompatActivity {
                 }
             }
         });
-//        ? bug dimana create user tapi masih login
-//        ? double login krn buat create user baru akan selalu login dengan akun baru
 
     }
     public void RegisterActivityForUploadImage(){
@@ -219,4 +216,7 @@ public class AddStaffActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

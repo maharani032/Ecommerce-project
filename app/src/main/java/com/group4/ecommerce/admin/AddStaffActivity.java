@@ -128,10 +128,9 @@ public class AddStaffActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     reference.child("Users").child(auth.getUid()).child("email").setValue(email);
+                    reference.child("Users").child(auth.getUid()).child("role").setValue("staff");
                     reference.child("Users").child(auth.getUid()).child("fullname").setValue(fullname);
 //                        role=> user,staff,admin
-                    reference.child("Users").child(auth.getUid()).child("admin").setValue(false);
-                    reference.child("Users").child(auth.getUid()).child("staff").setValue(true);
                     if(imageControl){
                         UUID randomId= UUID.randomUUID();
                         String imageName = "StaffPicture/"+ randomId + " - "+fullname+".jpg";

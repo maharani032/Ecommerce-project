@@ -74,7 +74,6 @@ public class WelcomeActivity extends AppCompatActivity {
     }
     public void signIn(String email,String password){
         pb.setVisibility(View.VISIBLE);
-//       auth sign in
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -94,11 +93,7 @@ public class WelcomeActivity extends AppCompatActivity {
         reference.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Boolean admin= (Boolean) snapshot.child("admin").getValue();
-                Boolean staff= (Boolean) snapshot.child("staff").getValue();
-
-                Log.i("login", String.valueOf(admin));
-                if(admin==true){
+                if(snapshot.child("role").equals("admin")){
                     preferences.setDataLogin(WelcomeActivity.this, true);
                     preferences.setDataAs(WelcomeActivity.this, "admin");
                     preferences.setDataUid(WelcomeActivity.this,id);
@@ -106,30 +101,24 @@ public class WelcomeActivity extends AppCompatActivity {
                     Intent adminPage= new Intent(WelcomeActivity.this, AdminActivity.class);
                     startActivity(adminPage);
 
-                }
-                else if(admin==false && staff==false){
+                } else if(snapshot.child("role").equals("user")){
                     preferences.setDataLogin(WelcomeActivity.this, true);
                     preferences.setDataAs(WelcomeActivity.this, "user");
                     preferences.setDataUid(WelcomeActivity.this,id);
 //                                pindah ke halaman user
                     Log.i("login", "halaman user");
                     pb.setVisibility(View.INVISIBLE);
-
-
-
-                }
-                else if(staff==true){
+                }else if(snapshot.child("role").equals("staff")){
                     preferences.setDataLogin(WelcomeActivity.this, true);
                     preferences.setDataAs(WelcomeActivity.this, "staff");
                     preferences.setDataUid(WelcomeActivity.this,id);
-//                                pindah ke halaman staff
                     Log.i("login", "halaman staff");
                     pb.setVisibility(View.INVISIBLE);
-
-
                 }
                 else{
                     FirebaseAuth.getInstance().signOut();
+                    pb.setVisibility(View.INVISIBLE);
+
                 }
 
             }
@@ -149,10 +138,5 @@ public class WelcomeActivity extends AppCompatActivity {
                 finish();
             }
         }
-//        Log.i("login","on start");
-//        FirebaseUser user=auth.getCurrentUser();
-//        if(user!= null){
-//            checkRole(user.getUid());
-//        }
     }
 }

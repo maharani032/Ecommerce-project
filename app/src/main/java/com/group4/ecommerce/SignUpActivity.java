@@ -44,13 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             reference.child("Users").child(auth.getUid()).child("email").setValue(email);
-
 //                        role=> user,staff,admin
-                            reference.child("Users").child(auth.getUid()).child("admin").setValue(false);
-                            reference.child("Users").child(auth.getUid()).child("staff").setValue(false);
-
-                            reference.child("User").child(auth.getUid()).child("Fullname").setValue(fullname);
-                            reference.child("User").child(auth.getUid()).child("email").setValue(email);
+                            reference.child("Users").child(auth.getUid()).child("role").setValue("user");
+                            reference.child("Users").child(auth.getUid()).child("Fullname").setValue(fullname);
 
                             Intent welcome=new Intent(SignUpActivity.this,WelcomeActivity.class);
                             startActivity(welcome);

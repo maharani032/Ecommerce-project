@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.group4.ecommerce.R;
 import com.group4.ecommerce.WelcomeActivity;
 import com.group4.ecommerce.databinding.ActivityAdminBinding;
+import com.group4.ecommerce.preferences;
 
 public class AdminActivity extends AppCompatActivity {
 
@@ -48,6 +49,7 @@ public class AdminActivity extends AppCompatActivity {
         navigationView.getMenu().findItem(R.id.nav_signout).setOnMenuItemClickListener(menuItem -> {
             FirebaseAuth.getInstance().signOut();
             Intent i= new Intent(AdminActivity.this, WelcomeActivity.class);
+            preferences.clearData(this);
             startActivity(i);
             return true;
         });

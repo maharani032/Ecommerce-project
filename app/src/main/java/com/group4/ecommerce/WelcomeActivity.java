@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,20 +94,23 @@ public class WelcomeActivity extends AppCompatActivity {
         reference.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.child("admin").exists()){
-                    FirebaseAuth.getInstance().signOut();
-                }
                 Boolean admin= (Boolean) snapshot.child("admin").getValue();
                 Boolean staff= (Boolean) snapshot.child("staff").getValue();
 
                 Log.i("login", String.valueOf(admin));
-                if(admin==true && staff==false){
+                if(admin==true){
+                    preferences.setDataLogin(WelcomeActivity.this, true);
+                    preferences.setDataAs(WelcomeActivity.this, "admin");
+                    preferences.setDataUid(WelcomeActivity.this,id);
 //                                pindah halaman admin
                     Intent adminPage= new Intent(WelcomeActivity.this, AdminActivity.class);
                     startActivity(adminPage);
 
                 }
                 else if(admin==false && staff==false){
+                    preferences.setDataLogin(WelcomeActivity.this, true);
+                    preferences.setDataAs(WelcomeActivity.this, "user");
+                    preferences.setDataUid(WelcomeActivity.this,id);
 //                                pindah ke halaman user
                     Log.i("login", "halaman user");
                     pb.setVisibility(View.INVISIBLE);
@@ -116,7 +118,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
                 }
-                else if(staff==true && admin==false){
+                else if(staff==true){
+                    preferences.setDataLogin(WelcomeActivity.this, true);
+                    preferences.setDataAs(WelcomeActivity.this, "staff");
+                    preferences.setDataUid(WelcomeActivity.this,id);
 //                                pindah ke halaman staff
                     Log.i("login", "halaman staff");
                     pb.setVisibility(View.INVISIBLE);
@@ -138,10 +143,16 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("login","on start");
-        FirebaseUser user=auth.getCurrentUser();
-        if(user!= null){
-            checkRole(user.getUid());
+        if (preferences.getDataLogin(this)) {
+            if (preferences.getDataAs(this).equals("admin")) {
+                startActivity(new Intent(this, AdminActivity.class));
+                finish();
+            }
         }
+//        Log.i("login","on start");
+//        FirebaseUser user=auth.getCurrentUser();
+//        if(user!= null){
+//            checkRole(user.getUid());
+//        }
     }
 }

@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,20 +27,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group4.ecommerce.admin.AddStaffActivity;
 import com.group4.ecommerce.admin.adapter.StaffAdapter;
-import com.group4.ecommerce.admin.model.Staff;
 import com.group4.ecommerce.databinding.FragmentStaffBinding;
+import com.group4.ecommerce.model.Staff;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StaffFragment extends Fragment {
     ActivityResultLauncher<Intent> activityResultLauncherForAddStaff;
-    String fullname,email,staffPicture;
+//    String fullname,email,staffPicture;
     Staff staff;
     RecyclerView rv;
 
-    FirebaseAuth auth;
-    FirebaseUser user;
     DatabaseReference reference;
     FirebaseDatabase database;
 
@@ -83,8 +79,6 @@ public class StaffFragment extends Fragment {
         rv= binding.rvStaff;
         rv.setLayoutManager(new LinearLayoutManager(requireActivity()));
 //        binding.rvStaff.setAdapter(staffAdapter);
-        auth= FirebaseAuth.getInstance();
-        user= auth.getCurrentUser();
         database= FirebaseDatabase.getInstance();
         reference= database.getReference();
 
@@ -134,17 +128,18 @@ public class StaffFragment extends Fragment {
                 Intent data=result.getData();
 //                resultCode == Result_ok // berhasil creat user
 //                resultCode == 2 // tidak berhasil create user
+
                 if(ResultCode==RESULT_OK && data !=null){
-                    Log.i("result data",data.toString());
+                    Log.i("data staff fragment",data.toString());
                     String id=data.getStringExtra("id");
                     String fullname=data.getStringExtra("fullname");
                     String image=data.getStringExtra("image");
                     String email=data.getStringExtra("email");
                     if(id!=null && fullname!=null && image!=null && email!=null){
-                    reference.child("Staffs").child(id).child("fullname").setValue(fullname);
-                    reference.child("Staffs").child(id).child("image").setValue(image);
-                    reference.child("Staffs").child(id).child("email").setValue(email);
-                    notify();
+                        reference.child("Staffs").child(id).child("fullname").setValue(fullname);
+                        reference.child("Staffs").child(id).child("image").setValue(image);
+                        reference.child("Staffs").child(id).child("email").setValue(email);
+                        notify();
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.group4.ecommerce.admin.model;
+package com.group4.ecommerce.model;
 
 import java.util.ArrayList;
 

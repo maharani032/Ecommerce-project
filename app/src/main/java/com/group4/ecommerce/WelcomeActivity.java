@@ -13,10 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,18 +21,25 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AdminActivity;
+import com.group4.ecommerce.model.Auth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WelcomeActivity extends AppCompatActivity {
     private EditText inputEmail,inputPassword ;
     private Button buttonSignIn;
     private TextView daftar;
     private ProgressBar pb;
-
-    FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference reference;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+    List<String> lEmail= new ArrayList<>();
+    List<String> lId= new ArrayList<>();
+    String id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,6 @@ public class WelcomeActivity extends AppCompatActivity {
         firebaseStorage= FirebaseStorage.getInstance();
         storageReference=firebaseStorage.getReference();
 
-        auth=FirebaseAuth.getInstance();
 
         daftar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +66,7 @@ public class WelcomeActivity extends AppCompatActivity {
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email=inputEmail.getText().toString();
+                String email=inputEmail.getText().toString().replaceAll("\\s+","");
                 String password=inputPassword.getText().toString();
                 if(!email.isEmpty() && !password.isEmpty()) signIn(email,password);
                 else if(password.length()<=5) Toast.makeText(WelcomeActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
@@ -74,53 +76,61 @@ public class WelcomeActivity extends AppCompatActivity {
     }
     public void signIn(String email,String password){
         pb.setVisibility(View.VISIBLE);
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        reference.child("Auth").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Log.i("login","login sucess");
-                    checkRole(auth.getUid());
-
-                }else{
-                    pb.setVisibility(View.GONE);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot keys:snapshot.getChildren()){
+                    Auth auth=keys.getValue(Auth.class);
+                    if(keys.child("email").getValue().toString().equals(email)){
+                        id=keys.child("id").getValue().toString();
+                        CheckRole(id,email,password);
+                    }
                 }
+                Log.i("id",id);
+
+                pb.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
-    public void checkRole(String id){
-        pb.setVisibility(View.VISIBLE);
-
-        reference.child("Users").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void CheckRole(String id,String email,String password){
+        reference.child("Auth").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("role").equals("admin")){
-                    preferences.setDataLogin(WelcomeActivity.this, true);
-                    preferences.setDataAs(WelcomeActivity.this, "admin");
-                    preferences.setDataUid(WelcomeActivity.this,id);
+                Auth auth=snapshot.getValue(Auth.class);
+
+                if(auth.getEmail().equals(email) && auth.getPassword().equals(password)){
+                    if(auth.getRole().equals("user")){
+                        preferences.setDataLogin(WelcomeActivity.this, true);
+                        preferences.setDataAs(WelcomeActivity.this, "user");
+                        preferences.setDataUid(WelcomeActivity.this,auth.getId());
+
+
+                    }
+                    else if(auth.getRole().equals("admin")){
+
+                        preferences.setDataLogin(WelcomeActivity.this, true);
+                        preferences.setDataAs(WelcomeActivity.this, "admin");
+                        preferences.setDataUid(WelcomeActivity.this,auth.getId());
 //                                pindah halaman admin
-                    Intent adminPage= new Intent(WelcomeActivity.this, AdminActivity.class);
-                    startActivity(adminPage);
-
-                } else if(snapshot.child("role").equals("user")){
-                    preferences.setDataLogin(WelcomeActivity.this, true);
-                    preferences.setDataAs(WelcomeActivity.this, "user");
-                    preferences.setDataUid(WelcomeActivity.this,id);
-//                                pindah ke halaman user
-                    Log.i("login", "halaman user");
-                    pb.setVisibility(View.INVISIBLE);
-                }else if(snapshot.child("role").equals("staff")){
-                    preferences.setDataLogin(WelcomeActivity.this, true);
-                    preferences.setDataAs(WelcomeActivity.this, "staff");
-                    preferences.setDataUid(WelcomeActivity.this,id);
-                    Log.i("login", "halaman staff");
-                    pb.setVisibility(View.INVISIBLE);
+                        Intent adminPage= new Intent(WelcomeActivity.this, AdminActivity.class);
+                        startActivity(adminPage);
+                    }
+                    else if(auth.getRole().equals("staff")){
+                        preferences.setDataLogin(WelcomeActivity.this, true);
+                        preferences.setDataAs(WelcomeActivity.this, "staff");
+                        preferences.setDataUid(WelcomeActivity.this,auth.getId());
+                        Log.i("login", "halaman staff");
+                    }
                 }
-                else{
-                    FirebaseAuth.getInstance().signOut();
-                    pb.setVisibility(View.INVISIBLE);
-
+                else {
+                    Toast.makeText(WelcomeActivity.this,"check password & email",Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override

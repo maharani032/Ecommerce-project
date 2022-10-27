@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,18 +22,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.group4.ecommerce.R;
+import com.group4.ecommerce.model.Auth;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -47,22 +48,18 @@ public class AddStaffActivity extends AppCompatActivity {
     CircleImageView staffPicture;
     EditText inputEmail,inputPassword,inputFullname;
     ProgressBar pb;
-
-    FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference reference;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
-    boolean imageControl=false;
+    boolean imageControl=false,checkEmailStaff=false;
     Uri selectedImage;
-    String imagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
         RegisterActivityForUploadImage();
-        auth= FirebaseAuth.getInstance();
         database= FirebaseDatabase.getInstance();
         reference=database.getReference();
         firebaseStorage= FirebaseStorage.getInstance();
@@ -79,7 +76,6 @@ public class AddStaffActivity extends AppCompatActivity {
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent();
                 setResult(RESULT_CANCELED);
                 finish();
             }
@@ -87,12 +83,40 @@ public class AddStaffActivity extends AppCompatActivity {
         addStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email=inputEmail.getText().toString();
+                pb.setVisibility(View.VISIBLE);
+
+                String email=inputEmail.getText().toString().replaceAll("\\s+","");;
                 String password=inputPassword.getText().toString();
                 String fullname=inputFullname.getText().toString();
-                    if(!email.isEmpty() && !password.isEmpty()) {
-                        RegisterStaff(email,password,fullname);
+                UUID randomId= UUID.randomUUID();
+                if(!email.isEmpty() && !password.isEmpty()) {
+                    reference.child("Auth").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot keys:snapshot.getChildren()){
+                                Auth auth=keys.getValue(Auth.class);
+                                if(String.valueOf(keys.child("email")).equals(email)){
+                                    checkEmailStaff=true;
+                                }
+                            }
+                            if(checkEmailStaff){;
+                                pb.setVisibility(View.INVISIBLE); return;}
+                            else if (!checkEmailStaff)
+                            {
+                                RegisterStaff(email,password,fullname, randomId.toString());
+                                Log.i("imageControl",String.valueOf(imageControl));
 
+                            }
+//                            position upload gambar tapi keluar dari apk
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    uploadFoto(fullname, email, randomId.toString());
                     }
                 else if(password.length()<=5) Toast.makeText(AddStaffActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
                 else Toast.makeText(AddStaffActivity.this,"Please Input Your Email,Fullname and Password",Toast.LENGTH_SHORT).show();
@@ -118,84 +142,58 @@ public class AddStaffActivity extends AppCompatActivity {
             activityResultLauncherForUploadImage.launch(i);
         }
     }
-
-    public void RegisterStaff(String email, String password, String fullname){
-        //        TODO: double login krn buat create user ketika masih login
+    public void RegisterStaff(String email, String password, String fullname,String id){
 
         pb.setVisibility(View.VISIBLE);
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    reference.child("Users").child(auth.getUid()).child("email").setValue(email);
-                    reference.child("Users").child(auth.getUid()).child("role").setValue("staff");
-                    reference.child("Users").child(auth.getUid()).child("fullname").setValue(fullname);
-//                        role=> user,staff,admin
-                    if(imageControl){
-                        UUID randomId= UUID.randomUUID();
-                        String imageName = "StaffPicture/"+ randomId + " - "+fullname+".jpg";
-                        storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                StorageReference myStorageRef=firebaseStorage.getReference(imageName);
-                                myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Intent i =new Intent();
-                                        i.putExtra("email",email);
-                                        i.putExtra("fullname",fullname);
-                                        i.putExtra("id",auth.getUid());
-                                        i.putExtra("image",uri.toString());
-                                        setResult(RESULT_OK,i);
-                                        finish();
-
-//                                        reference.child("Staffs").child(auth.getUid()).child("image").setValue("null");
-
-                                    }
-                                });
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AddStaffActivity.this,"upload gambar gagal",Toast.LENGTH_LONG).show();
-
-                            }
-                        });
-                    }
-                    else if(!imageControl){
-                        Intent i =new Intent();
-                        i.putExtra("email",email);
-                        i.putExtra("fullname",fullname);
-                        i.putExtra("id",auth.getUid());
-                        i.putExtra("image","null");
-                        setResult(RESULT_OK,i);
-                        auth.signOut();
-                        finish();
+        reference.child("Auth").child(id).child("id").setValue(id);
+        reference.child("Auth").child(id).child("email").setValue(email);
+        reference.child("Auth").child(id).child("password").setValue(password);
+        reference.child("Auth").child(id).child("role").setValue("staff");
 
 
-                    }
-
-
-//                    reference.child("Staffs").child(auth.getUid()).child("fullname").setValue(fullname);
-//                    reference.child("Staffs").child(auth.getUid()).child("email").setValue(email);
-//                    if(!imageControl){
-//                        reference.child("Staffs").child(auth.getUid()).child("image").setValue("null");
-//                        imagePath="null";
-//                    }
-
-
-
-                }
-
-                else if(!task.isSuccessful()){
-                    pb.setVisibility(View.GONE);
-                    Toast.makeText(AddStaffActivity.this,"cek email dan password",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
     }
+
+public void uploadFoto(String fullname,String email,String id) {
+    if (imageControl) {
+        UUID randomId = UUID.randomUUID();
+        String imageName = "StaffPicture/" + randomId.toString() + " - " + fullname + ".jpg";
+        storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageReference myStorageRef = firebaseStorage.getReference(imageName);
+                myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Intent i = new Intent();
+                        i.putExtra("email", email);
+                        i.putExtra("fullname", fullname);
+                        i.putExtra("id", id);
+                        i.putExtra("image", uri.toString());
+                        setResult(RESULT_OK, i);
+                        finish();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddStaffActivity.this, "upload gambar gagal", Toast.LENGTH_LONG).show();
+            }
+        });
+    }else{
+        Log.i("di imageControl false",String.valueOf(imageControl));
+        Intent i = new Intent();
+        i.putExtra("email",email);
+        i.putExtra("fullname",fullname);
+        i.putExtra("id",id);
+        i.putExtra("image","String");
+        setResult(RESULT_OK,i);
+        finish();
+    }
+}
+
+
     public void RegisterActivityForUploadImage(){
         activityResultLauncherForUploadImage= registerForActivityResult(new ActivityResultContracts
                 .StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {

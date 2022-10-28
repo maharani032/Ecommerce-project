@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.AddProductActivity">
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:defaultFocusHighlightEnabled="true"
+        />
+<!--    navbar-->
+    <LinearLayout
+        android:id="@+id/navbar_add_products"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green_700"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_baseline_arrow_back_ios_new_24"
+            android:contentDescription="@string/go_back"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:paddingStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/text_navbar"
+            android:text="@string/add_product"
+            />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/navbar_add_products"
+        android:scrollbars="none">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputs"
+                >
+                <!--            gambar-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ic_baseline_person_24"
+                    android:contentDescription="@string/upload_picture"
+                    android:id="@+id/productImage"/>
+                <!--            product id-->
+                <RelativeLayout
+                    android:id="@+id/field_productId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/productImage"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/productIdPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="@string/product_id"
+                        android:textAppearance="@style/placeHolderInput" />
+
+                    <RelativeLayout
+                        android:id="@+id/field_input_idproduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/productIdPlaceHolder"
+                        android:background="@drawable/inputfield">
+
+                        <EditText
+                            android:id="@+id/input_productId"
+                            style="@style/input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/frame_165"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:minHeight="48dp"
+                            tools:ignore="TextContrastCheck" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+                <!--            nama product-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/field_name_stock"
+                    android:layout_below="@+id/field_productId"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    >
+                    <TextView
+                        android:id="@+id/name_stock_placeHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="@string/name_product"
+                        android:textAppearance="@style/placeHolderInput"
+                        android:layout_marginBottom="7dp"
+                        />
+                    <!--        input email-->
+                    <RelativeLayout
+                        android:layout_below="@+id/name_stock_placeHolder"
+                        android:id="@+id/field_input_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_name"
+                            style="@style/input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/frame_165"
+                            android:importantForAutofill="no"
+                            android:inputType="text"
+                            android:minHeight="48dp"
+                            tools:ignore="TextContrastCheck" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+                <!--            kuantitas product-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/field_kuantitas"
+                    android:layout_below="@+id/field_name_stock"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/kuantitas_placeHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="kuantitas product"
+                        android:textAppearance="@style/placeHolderInput"
+                        android:layout_marginBottom="7dp"
+                        />
+                    <RelativeLayout
+                        android:layout_below="@+id/kuantitas_placeHolder"
+                        android:id="@+id/field_input_kuantitas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_kuantitas"
+                            style="@style/input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/frame_165"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:minHeight="48dp"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--            harga satuan-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/field_harga"
+                    android:layout_below="@+id/field_kuantitas"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/hargaPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="Harga satuan product"
+                        android:textAppearance="@style/placeHolderInput"
+                        android:layout_marginBottom="7dp"
+                        />
+                    <RelativeLayout
+                        android:layout_below="@+id/hargaPlaceHolder"
+                        android:id="@+id/field_input_harga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_harga"
+                            style="@style/input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/frame_165"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:minHeight="48dp"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--            kategori product-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_below="@+id/field_harga"
+                    android:id="@+id/field_kategori_Product"
+                    >
+
+                    <TextView
+                        android:id="@+id/kategoriProductPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="@string/kategori_product"
+                        android:textAppearance="@style/placeHolderInput"
+                        android:layout_marginBottom="7dp"
+                        />
+                    <RelativeLayout
+                        android:layout_below="@id/kategoriProductPlaceHolder"
+                        android:id="@+id/field_input_kategori"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+
+                        <Spinner
+                            android:id="@+id/input_kategori_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:minHeight="48dp"
+                            android:popupBackground="@drawable/frame_165"
+                            android:spinnerMode="dropdown" />
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--    kategori item-->
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_below="@+id/field_kategori_Product"
+                    android:id="@+id/field_kategori_item"
+                    >
+
+                    <TextView
+                        android:id="@+id/kategoriItemPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="@string/kategori_item"
+                        android:textAppearance="@style/placeHolderInput" />
+                    <RelativeLayout
+                        android:layout_below="@id/kategoriItemPlaceHolder"
+                        android:id="@+id/field_input_kategori_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+                        <Spinner
+                            android:id="@+id/input_kategori_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:spinnerMode="dropdown"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--            filter item-->
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_below="@+id/field_kategori_item"
+                    android:id="@+id/field_filter"
+                    >
+
+                    <TextView
+                        android:id="@+id/filterPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="@string/filter_product"
+                        android:textAppearance="@style/placeHolderInput" />
+                    <RelativeLayout
+                        android:layout_below="@id/filterPlaceHolder"
+                        android:id="@+id/field_input_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+                        <Spinner
+                            android:id="@+id/input_filter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:spinnerMode="dropdown"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_margin="20dp"
+                android:id="@+id/btnaddProduct"
+                android:layout_below="@+id/inputs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_large"
+                android:text="@string/add_product"
+                android:textColor="@color/white"
+                tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

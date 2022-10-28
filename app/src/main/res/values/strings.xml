@@ -25,4 +25,33 @@
     <string name="profile_picture">profile picture</string>
     <string name="nama">Nama</string>
     <string name="sign_up">Sign Up</string>
+    <string name="add_product">Add Product</string>
+    <string name="go_back">go back</string>
+    <string name="upload_picture">upload picture</string>
+    <string name="name_product">name product</string>
+    <string name="kategori_product">Kategori Product</string>
+    <string name="kategori_item">Kategori Item</string>
+    <string name="filter_product">Filter Product</string>
+    <string name="product_id">product Id</string>
+    <string-array name="kategori_item">
+        <item>Clothing</item>
+        <item>Electronic</item>
+        <item>Book</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="kategori_clothing">
+        <item>T-Shirt</item>
+        <item>Jacket</item>
+        <item>Shorts</item>
+        <item>Pants</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="kategori_electonic">
+        <item>Computer</item>
+        <item>Smartphone</item>
+    </string-array>
+    <string-array name="filter_clothing">
+        <item>Men</item>
+        <item>Women</item>
+    </string-array>
 </resources>

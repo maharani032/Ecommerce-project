@@ -33,7 +33,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.group4.ecommerce.R;
-import com.group4.ecommerce.model.Auth;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -90,25 +89,10 @@ public class AddStaffActivity extends AppCompatActivity {
                 String fullname=inputFullname.getText().toString();
                 UUID randomId= UUID.randomUUID();
                 if(!email.isEmpty() && !password.isEmpty()) {
-                    reference.child("Auth").addValueEventListener(new ValueEventListener() {
+                    reference.child("Auth").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot keys:snapshot.getChildren()){
-                                Auth auth=keys.getValue(Auth.class);
-                                if(String.valueOf(keys.child("email")).equals(email)){
-                                    checkEmailStaff=true;
-                                }
-                            }
-                            if(checkEmailStaff){;
-                                pb.setVisibility(View.INVISIBLE); return;}
-                            else if (!checkEmailStaff)
-                            {
-                                RegisterStaff(email,password,fullname, randomId.toString());
-                                Log.i("imageControl",String.valueOf(imageControl));
-
-                            }
-//                            position upload gambar tapi keluar dari apk
-
+                            checkEmailStaff=true;
                         }
 
                         @Override
@@ -116,7 +100,40 @@ public class AddStaffActivity extends AppCompatActivity {
 
                         }
                     });
-                    uploadFoto(fullname, email, randomId.toString());
+                    if(checkEmailStaff){
+                        pb.setVisibility(View.INVISIBLE); return;
+                    }else{
+                        RegisterStaff(email,password,fullname, randomId.toString());
+                        uploadFoto(fullname, email, randomId.toString());
+
+                    }
+//                    reference.child("Auth").addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                            for (DataSnapshot keys:snapshot.getChildren()){
+//                                Auth auth=keys.getValue(Auth.class);
+//                                if(String.valueOf(keys.child("email")).equals(email)){
+//                                    checkEmailStaff=true;
+//                                }
+//                            }
+//                            if(checkEmailStaff){;
+//                                pb.setVisibility(View.INVISIBLE); return;}
+//                            else if (!checkEmailStaff)
+//                            {
+//                                RegisterStaff(email,password,fullname, randomId.toString());
+//                                Log.i("imageControl",String.valueOf(imageControl));
+//
+//                            }
+////                            position upload gambar tapi keluar dari apk
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//                    uploadFoto(fullname, email, randomId.toString());
                     }
                 else if(password.length()<=5) Toast.makeText(AddStaffActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
                 else Toast.makeText(AddStaffActivity.this,"Please Input Your Email,Fullname and Password",Toast.LENGTH_SHORT).show();
@@ -156,8 +173,7 @@ public class AddStaffActivity extends AppCompatActivity {
 
 public void uploadFoto(String fullname,String email,String id) {
     if (imageControl) {
-        UUID randomId = UUID.randomUUID();
-        String imageName = "StaffPicture/" + randomId.toString() + " - " + fullname + ".jpg";
+        String imageName = "StaffPicture/" + id+ " - " + fullname + ".jpg";
         storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

@@ -35,8 +35,6 @@ import java.util.List;
 
 public class StaffFragment extends Fragment {
     ActivityResultLauncher<Intent> activityResultLauncherForAddStaff;
-//    String fullname,email,staffPicture;
-    Staff staff;
     RecyclerView rv;
 
     DatabaseReference reference;
@@ -45,10 +43,9 @@ public class StaffFragment extends Fragment {
     FloatingActionButton fabStaff;
     private FragmentStaffBinding binding;
 
-    List<Staff> listStaff= new ArrayList<>();
     List<String> listKEY=new ArrayList<>();
 
-    List<String> list;
+    List<Staff> list=new ArrayList<>();
     StaffAdapter staffAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -81,20 +78,21 @@ public class StaffFragment extends Fragment {
 //        binding.rvStaff.setAdapter(staffAdapter);
         database= FirebaseDatabase.getInstance();
         reference= database.getReference();
+        list=new ArrayList<>();
+        staffAdapter=new StaffAdapter(list,getContext());
+        rv.setAdapter(staffAdapter);
 
         reference.child("Staffs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot keys:snapshot.getChildren()){
-                    Staff staff=keys.getValue(Staff.class);
-                    String key= keys.getKey();
-                    listKEY.add(key);
-                    Log.d("staff", "User name: " + staff.getFullname().toString() + ", email " + staff.getEmail());
-                    staffAdapter=new StaffAdapter(listKEY,staff.getFullname(),staff.getEmail(),staff.getImage(),getContext());
-
-                    rv.setAdapter(staffAdapter);
+                list.clear();
+                for (DataSnapshot sp:snapshot.getChildren()){
+                    Staff staff=sp.getValue(Staff.class);
+                    list.add(staff);
                 }
+                staffAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -103,48 +101,30 @@ public class StaffFragment extends Fragment {
 
 
     }
-
-    public void getStaffs(){
-    reference.child("Staffs").addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            String key= snapshot.getKey();
-            list.add(key);
-            staffAdapter.notifyDataSetChanged();
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    });
-}
     public void RegisterActivityForAddStaff(){
-        activityResultLauncherForAddStaff= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                int ResultCode=result.getResultCode();
-                Intent data=result.getData();
-//                resultCode == Result_ok // berhasil creat user
-//                resultCode == 2 // tidak berhasil create user
+        activityResultLauncherForAddStaff=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        int ResultCode=result.getResultCode();
+                        Intent data=result.getData();
 
-                if(ResultCode==RESULT_OK && data !=null){
-                    Log.i("data staff fragment",data.toString());
-                    String id=data.getStringExtra("id");
-                    String fullname=data.getStringExtra("fullname");
-                    String image=data.getStringExtra("image");
-                    String email=data.getStringExtra("email");
-                    if(id!=null && fullname!=null && image!=null && email!=null){
-                        reference.child("Staffs").child(id).child("fullname").setValue(fullname);
-                        reference.child("Staffs").child(id).child("image").setValue(image);
-                        reference.child("Staffs").child(id).child("email").setValue(email);
-                        notify();
+                        if(ResultCode==RESULT_OK && data !=null){
+                            Log.i("data staff fragment",data.toString());
+                            String id=data.getStringExtra("id");
+                            String fullname=data.getStringExtra("fullname");
+                            String image=data.getStringExtra("image");
+                            String email=data.getStringExtra("email");
+                            if(id!=null && fullname!=null && image!=null && email!=null){
+                                reference.child("Staffs").child(id).child("fullname").setValue(fullname);
+                                reference.child("Staffs").child(id).child("image").setValue(image);
+                                reference.child("Staffs").child(id).child("email").setValue(email);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

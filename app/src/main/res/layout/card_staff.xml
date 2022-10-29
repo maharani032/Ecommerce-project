@@ -8,6 +8,8 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="horizontal"
+        android:background="@drawable/frame_165"
+        android:layout_margin="7dp"
         >
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="100dp"

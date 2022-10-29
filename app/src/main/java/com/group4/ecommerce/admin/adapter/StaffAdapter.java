@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.R;
 import com.group4.ecommerce.model.Staff;
 import com.squareup.picasso.Picasso;
@@ -23,9 +25,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffHolder> {
     List<Staff> staffList;
     Context mContext;
+    private OnItemClickListener listenerUpdate;
 
     FirebaseDatabase database;
     DatabaseReference reference;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     public StaffAdapter(List<Staff> staffList, Context mContext) {
         this.staffList = staffList;
@@ -75,6 +80,24 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffHolder>
             fname=itemView.findViewById(R.id.fname);
             email=itemView.findViewById(R.id.email);
             staffPicture=itemView.findViewById(R.id.staffpicture);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+
+                    if(listenerUpdate!=null &&position!=RecyclerView.NO_POSITION){
+                        listenerUpdate.onItemClick(staffList.get(position));
+                    }
+                }
+            });
         }
+
+    }
+    public interface OnItemClickListener{
+        void onItemClick(Staff staff);
+    }
+    public void setOnItemClickListenerUpdate(OnItemClickListener listener){
+        this.listenerUpdate=listener;
     }
 }

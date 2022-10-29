@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -44,6 +45,7 @@ public class AddStaffActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> activityResultLauncherForUploadImage;
     Button addStaff;
     ImageView goback;
+    TextView titlenavbar;
     CircleImageView staffPicture;
     EditText inputEmail,inputPassword,inputFullname;
     ProgressBar pb;
@@ -54,6 +56,18 @@ public class AddStaffActivity extends AppCompatActivity {
 
     boolean imageControl=false,checkEmailStaff=false;
     Uri selectedImage;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent i=getIntent();
+        String id=i.getStringExtra("id");
+
+        if(id!=null){
+            getData();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +84,10 @@ public class AddStaffActivity extends AppCompatActivity {
         inputPassword=findViewById(R.id.input_password);
         inputFullname=findViewById(R.id.input_fullname);
         addStaff=findViewById(R.id.btnAddStaff);
+
         pb=findViewById(R.id.pb);
+        titlenavbar=findViewById(R.id.title_navbar);
+        Intent i=getIntent();
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +104,14 @@ public class AddStaffActivity extends AppCompatActivity {
                 String email=inputEmail.getText().toString().replaceAll("\\s+","");;
                 String password=inputPassword.getText().toString();
                 String fullname=inputFullname.getText().toString();
-                UUID randomId= UUID.randomUUID();
+                Intent i=getIntent();
+                String id=i.getStringExtra("id");
+                String randomId;
+                if(id!=null){
+                    randomId=i.getStringExtra("id");
+                }else{
+                    randomId= UUID.randomUUID().toString();
+                }
                 if(!email.isEmpty() && !password.isEmpty()) {
                     reference.child("Auth").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -103,37 +127,10 @@ public class AddStaffActivity extends AppCompatActivity {
                     if(checkEmailStaff){
                         pb.setVisibility(View.INVISIBLE); return;
                     }else{
-                        RegisterStaff(email,password,fullname, randomId.toString());
-                        uploadFoto(fullname, email, randomId.toString());
+                        RegisterStaff(email,password,fullname, randomId);
+                        uploadFoto(fullname, email, randomId);
 
                     }
-//                    reference.child("Auth").addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                            for (DataSnapshot keys:snapshot.getChildren()){
-//                                Auth auth=keys.getValue(Auth.class);
-//                                if(String.valueOf(keys.child("email")).equals(email)){
-//                                    checkEmailStaff=true;
-//                                }
-//                            }
-//                            if(checkEmailStaff){;
-//                                pb.setVisibility(View.INVISIBLE); return;}
-//                            else if (!checkEmailStaff)
-//                            {
-//                                RegisterStaff(email,password,fullname, randomId.toString());
-//                                Log.i("imageControl",String.valueOf(imageControl));
-//
-//                            }
-////                            position upload gambar tapi keluar dari apk
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//                    uploadFoto(fullname, email, randomId.toString());
                     }
                 else if(password.length()<=5) Toast.makeText(AddStaffActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
                 else Toast.makeText(AddStaffActivity.this,"Please Input Your Email,Fullname and Password",Toast.LENGTH_SHORT).show();
@@ -147,7 +144,27 @@ public class AddStaffActivity extends AppCompatActivity {
         });
 
     }
+    public void getData(){
+        Intent i=getIntent();
+//        String staffId=i.getStringExtra("id");
+        String staffemail=i.getStringExtra("email");
+        String staffpassword=i.getStringExtra("password");
+        String staffimage=i.getStringExtra("image");
+        String stafffullname=i.getStringExtra("fullname");
 
+        inputFullname.setText(stafffullname);
+        inputPassword.setText(staffpassword);
+        inputEmail.setText(staffemail);
+        if(staffimage.contains("https://firebasestorage.googleapis.com")){
+            selectedImage=Uri.parse(staffimage);
+            Picasso.get().load(staffimage).into(staffPicture);
+            imageControl=true;
+        }else{
+            imageControl=false;
+        }
+        addStaff.setText("Update Data");
+        titlenavbar.setText("Update Data");
+    }
     private void choosePhoto() {
         if (ContextCompat.checkSelfPermission(AddStaffActivity.this
                 , Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
@@ -173,32 +190,47 @@ public class AddStaffActivity extends AppCompatActivity {
 
 public void uploadFoto(String fullname,String email,String id) {
     if (imageControl) {
-        String imageName = "StaffPicture/" + id+ " - " + fullname + ".jpg";
-        storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                StorageReference myStorageRef = firebaseStorage.getReference(imageName);
-                myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Intent i = new Intent();
-                        i.putExtra("email", email);
-                        i.putExtra("fullname", fullname);
-                        i.putExtra("id", id);
-                        i.putExtra("image", uri.toString());
-                        setResult(RESULT_OK, i);
-                        finish();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AddStaffActivity.this, "upload gambar gagal", Toast.LENGTH_LONG).show();
-            }
-        });
+        Log.i("update",selectedImage.toString());
+        if(selectedImage.toString().contains("https://firebasestorage.googleapis.com"))
+        {
+            Log.i("update","gambar tidak upload ulang");
+            Intent i = new Intent();
+            i.putExtra("email", email);
+            i.putExtra("fullname", fullname);
+            i.putExtra("id", id);
+            i.putExtra("image", selectedImage.toString());
+            setResult(RESULT_OK, i);
+            finish();
+        }
+        else if(!selectedImage.toString().equals("String")||selectedImage!=null){
+            Log.i("update","upload foto");
+            String imageName = "StaffPicture/" + id+ " - " + fullname + ".jpg";
+            storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    StorageReference myStorageRef = firebaseStorage.getReference(imageName);
+                    myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Intent i = new Intent();
+                            i.putExtra("email", email);
+                            i.putExtra("fullname", fullname);
+                            i.putExtra("id", id);
+                            i.putExtra("image", uri.toString());
+                            setResult(RESULT_OK, i);
+                            finish();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddStaffActivity.this, "upload gambar gagal", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }else{
-        Log.i("di imageControl false",String.valueOf(imageControl));
+        Log.i("update","upload foto");
         Intent i = new Intent();
         i.putExtra("email",email);
         i.putExtra("fullname",fullname);

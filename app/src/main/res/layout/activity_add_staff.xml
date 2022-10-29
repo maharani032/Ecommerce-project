@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/text_navbar"
+            android:id="@+id/title_navbar"
             android:text="Add Staff"
             />
     </LinearLayout>

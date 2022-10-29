@@ -1,11 +1,11 @@
 package com.group4.ecommerce.model;
 
-public class product {
+public class Product {
     String id,image,name,jumlah,harga,filter,kategori,description;
-    public product(){
+    public Product(){
 
     }
-    public product(String id, String image, String name, String jumlah, String harga, String filter, String kategori, String description) {
+    public Product(String id, String image, String name, String jumlah, String harga, String filter, String kategori, String description) {
         this.id = id;
         this.image = image;
         this.name = name;

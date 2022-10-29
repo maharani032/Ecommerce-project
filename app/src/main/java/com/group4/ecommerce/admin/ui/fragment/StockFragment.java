@@ -1,7 +1,10 @@
 package com.group4.ecommerce.admin.ui.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AddProductActivity;
 import com.group4.ecommerce.databinding.FragmentStockBinding;
 
@@ -28,6 +33,8 @@ public class StockFragment extends Fragment {
 
     DatabaseReference reference;
     FirebaseDatabase database;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     FloatingActionButton fabProduct;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,6 +59,11 @@ public class StockFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RegisterActivityForAddProduct();
 
+        database= FirebaseDatabase.getInstance();
+        reference= database.getReference();
+        firebaseStorage= FirebaseStorage.getInstance();
+        storageReference=firebaseStorage.getReference();
+
     }
 
     public void RegisterActivityForAddProduct() {
@@ -61,19 +73,27 @@ public class StockFragment extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         int ResultCode=result.getResultCode();
                         Intent data=result.getData();
-//                        if(ResultCode==RESULT_OK && data !=null){
-//                            Log.i("data product fragment",data.toString());
-//                            String id=data.getStringExtra("id");
-//                            String fullname=data.getStringExtra("fullname");
-//                            String image=data.getStringExtra("image");
-//                            String email=data.getStringExtra("email");
-//                            if(id!=null && fullname!=null && image!=null && email!=null){
-//                                reference.child("Staffs").child(id).child("fullname").setValue(fullname);
-//                                reference.child("Staffs").child(id).child("image").setValue(image);
-//                                reference.child("Staffs").child(id).child("email").setValue(email);
-//                                notify();
-//                            }
-//                        }
+                        Log.i("product","tambah product");
+                        if(ResultCode==RESULT_OK && data !=null){
+                            String id=data.getStringExtra("id");
+                            String image=data.getStringExtra("image");
+                            String nama=data.getStringExtra("nama");
+                            String harga=data.getStringExtra("harga");
+                            String kbarang=data.getStringExtra("kategori barang");
+                            String kitem=data.getStringExtra("kategori item");
+                            String filter=data.getStringExtra("filter");
+                            String kuantitas=data.getStringExtra("kuantitas");
+
+                            if(id!=null||image!=null||nama!=null||harga!=null||kbarang!=null||kitem!=null||filter!=null||kuantitas!=null){
+                                reference.child("Products").child(id).child("id").setValue(id);
+                                reference.child("Products").child(id).child("nama product").setValue(nama);
+                                reference.child("Products").child(id).child("kategori barang").setValue(kbarang);
+                                reference.child("Products").child(id).child("kategori item").setValue(kitem);
+                                reference.child("Products").child(id).child("harga barang").setValue(harga);
+                                reference.child("Products").child(id).child("kuantitas barang").setValue(kuantitas);
+                                reference.child("Products").child(id).child("filter barang").setValue(filter);
+                            }
+                        }
                     }
                 });
     }

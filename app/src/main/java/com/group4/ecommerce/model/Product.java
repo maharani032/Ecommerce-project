@@ -1,11 +1,12 @@
 package com.group4.ecommerce.model;
 
 public class Product {
-    String id,image,name,jumlah,harga,filter,kategori,description;
+    String id,image,name,jumlah,harga,filter,kategori,description,kategoriItem;
     public Product(){
 
     }
-    public Product(String id, String image, String name, String jumlah, String harga, String filter, String kategori, String description) {
+    public Product(String id, String image, String name, String jumlah, String harga, String filter
+            ,String kategoriItem, String kategori, String description) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -14,6 +15,15 @@ public class Product {
         this.filter = filter;
         this.kategori = kategori;
         this.description = description;
+        this.kategoriItem=kategoriItem;
+    }
+
+    public String getKategoriItem() {
+        return kategoriItem;
+    }
+
+    public void setKategoriItem(String kategoriItem) {
+        this.kategoriItem = kategoriItem;
     }
 
     public String getId() {

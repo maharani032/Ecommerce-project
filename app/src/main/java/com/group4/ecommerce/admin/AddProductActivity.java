@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -41,26 +42,37 @@ public class AddProductActivity extends AppCompatActivity {
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
 
-
+    TextView titlenavbar;
     Spinner kategoriProduct,kategoriItem,filter;
     ProgressBar pb;
     CircleImageView cl;
     Button btn;
-    EditText namaProduct,idProduct,kuantitas,harga;
+    EditText namaProduct,idProduct,kuantitas,harga,deskripsi;
     RelativeLayout fieldKategoriItem,fieldFilter;
 
     boolean imageControl=false,checkProduct=false;
     Uri selectedImage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onStart() {
+        super.onStart();
+        Intent i=getIntent();
+        String id=i.getStringExtra("id");
+
+        if(id!=null){
+            getData();
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         RegisterActivityForUploadImage();
         kategoriProduct=findViewById(R.id.input_kategori_product);
         kategoriItem=findViewById(R.id.input_kategori_item);
         filter=findViewById(R.id.input_filter);
-
+        titlenavbar=findViewById(R.id.title_navbar);
         fieldKategoriItem=findViewById(R.id.field_kategori_item);
         fieldFilter=findViewById(R.id.field_filter);
 
@@ -68,6 +80,7 @@ public class AddProductActivity extends AppCompatActivity {
         idProduct=findViewById(R.id.input_productId);
         kuantitas=findViewById(R.id.input_kuantitas);
         harga=findViewById(R.id.input_harga);
+        deskripsi=findViewById(R.id.input_deskripsi);
         btn=findViewById(R.id.btnaddProduct);
         cl=findViewById(R.id.productImage);
         pb=findViewById(R.id.pb);
@@ -114,6 +127,7 @@ public class AddProductActivity extends AppCompatActivity {
                 String id=idProduct.getText().toString();
                 String nameProduct=namaProduct.getText().toString();
                 String inputCategori=kategoriProduct.getSelectedItem().toString();
+                String inputDeskripsi=deskripsi.getText().toString();
                 String kuantitasProduct=kuantitas.getText().toString();
                 String hargaProduct=harga.getText().toString();
                 if(imageControl==false ||
@@ -122,10 +136,11 @@ public class AddProductActivity extends AppCompatActivity {
                         nameProduct==null||
                         inputCategori==null||
                         hargaProduct==null||
-                        kuantitasProduct==null){
+                        kuantitasProduct==null||
+                        inputDeskripsi==null){
                     pb.setVisibility(View.INVISIBLE);
                     Toast.makeText(AddProductActivity.this
-                            ,"harus ada gambar, nama product,kategori,kuantitas barang"
+                            ,"harus ada gambar, nama product,kategori,kuantitas,harga,dekripsi barang"
                             ,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -146,7 +161,8 @@ public class AddProductActivity extends AppCompatActivity {
                     Toast.makeText(AddProductActivity.this,"ada id yg sama",Toast.LENGTH_SHORT).show();
                     return;
                 }else{
-                    uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter,inputCategoriItem);
+                    uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
+                            ,inputCategoriItem,inputDeskripsi);
                 }
 
             }
@@ -154,18 +170,6 @@ public class AddProductActivity extends AppCompatActivity {
 
 
     }
-//    public void AddProduct(String id,String nama,String kategori,
-//                           String jumlah,String hargabarang,String filter,String itemkategori){
-//        pb.setVisibility(View.VISIBLE);
-//        reference.child("Products").child(id).child("id").setValue(id);
-//        reference.child("Products").child(id).child("nama").setValue(nama);
-//        reference.child("Products").child(id).child("kategori barang").setValue(kategori);
-//        reference.child("Products").child(id).child("kategori item").setValue(itemkategori);
-//        reference.child("Products").child(id).child("harga barang").setValue(hargabarang);
-//        reference.child("Products").child(id).child("kuantitas barang").setValue(jumlah);
-//        reference.child("Products").child(id).child("filter barang").setValue(filter);
-//
-//    }
     private void choosePhoto() {
         if (ContextCompat.checkSelfPermission(AddProductActivity.this
                 , Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
@@ -178,7 +182,7 @@ public class AddProductActivity extends AppCompatActivity {
         }
     }
     public void uploadFoto(String id,String nama,String kategori, String jumlah,
-                           String hargabarang,String filter,String itemkategori
+                           String hargabarang,String filter,String itemkategori,String deskripsi
     ) {
             Log.i("update",selectedImage.toString());
             if(selectedImage.toString().contains("https://firebasestorage.googleapis.com"))
@@ -187,12 +191,13 @@ public class AddProductActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 i.putExtra("id", id);
                 i.putExtra("image", selectedImage.toString());
-                i.putExtra("nama",nama);
+                i.putExtra("name",nama);
                 i.putExtra("harga",hargabarang);
-                i.putExtra("kategori barang",kategori);
-                i.putExtra("kategori item",itemkategori);
+                i.putExtra("kategori",kategori);
+                i.putExtra("kategoriItem",itemkategori);
                 i.putExtra("filter",filter);
-                i.putExtra("kuantitas",jumlah);
+                i.putExtra("jumlah",jumlah);
+                i.putExtra("description",deskripsi);
 
                 setResult(RESULT_OK, i);
                 finish();
@@ -210,12 +215,13 @@ public class AddProductActivity extends AppCompatActivity {
                                 Intent i = new Intent();
                                 i.putExtra("id", id);
                                 i.putExtra("image", uri.toString());
-                                i.putExtra("nama",nama);
+                                i.putExtra("name",nama);
                                 i.putExtra("harga",hargabarang);
-                                i.putExtra("kategori barang",kategori);
-                                i.putExtra("kategori item",itemkategori);
+                                i.putExtra("kategori",kategori);
+                                i.putExtra("kategoriItem",itemkategori);
                                 i.putExtra("filter",filter);
-                                i.putExtra("kuantitas",jumlah);
+                                i.putExtra("jumlah",jumlah);
+                                i.putExtra("description",deskripsi);
                                 setResult(RESULT_OK, i);
                                 finish();
                             }
@@ -224,10 +230,51 @@ public class AddProductActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pb.setVisibility(View.INVISIBLE);
                         Toast.makeText(AddProductActivity.this, "upload gambar gagal", Toast.LENGTH_LONG).show();
                     }
                 });
             }
+    }
+    public void getData(){
+        Intent intent=getIntent();
+        String id=intent.getStringExtra("id");
+        String image=intent.getStringExtra("image");
+        String nProduct=intent.getStringExtra("name");
+        String hProduct=intent.getStringExtra("harga");
+        String kProduct=intent.getStringExtra("kategori");
+        String kItem=intent.getStringExtra("kategoriItem");
+        String filter=intent.getStringExtra("filter");
+        String jumlah=intent.getStringExtra("jumlah");
+        String dProduct=intent.getStringExtra("description");
+        namaProduct.setText(nProduct);
+        idProduct.setText(id);
+        kuantitas.setText(jumlah);
+        harga.setText(hProduct);
+        deskripsi.setText(dProduct);
+        Picasso.get().load(image).into(cl);
+        selectedImage=Uri.parse(image);
+        imageControl=true;
+        titlenavbar.setText("Update Product");
+        btn.setText("Update Product");
+        getProductKategori(kProduct);
+        if(kProduct.equals("Clothing")){
+            ItemKategori("clothing");
+            getItemKategori("clothing",kItem);
+            getFilterItemKategori(filter);
+            fieldFilter.setVisibility(View.VISIBLE);
+            fieldKategoriItem.setVisibility(View.VISIBLE);
+        }
+        else if(kProduct.equals("Electronic")){
+            getItemKategori("electronic",kItem);
+            fieldKategoriItem.setVisibility(View.VISIBLE);
+            fieldFilter.setVisibility(View.GONE);
+        }
+        else{
+            fieldKategoriItem.setVisibility(View.GONE);
+            fieldFilter.setVisibility(View.GONE);
+        }
+
     }
     public void ProductKategori(){
 
@@ -238,6 +285,16 @@ public class AddProductActivity extends AppCompatActivity {
         kategoriProductAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         kategoriProduct.setAdapter(kategoriProductAdapter);
+    }
+    public void getProductKategori(String x){
+        ArrayAdapter<CharSequence> kategoriProductAdapter = ArrayAdapter
+                .createFromResource(this, R.array.kategori_item,
+                        android.R.layout.simple_spinner_item);
+        kategoriProductAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        kategoriProduct.setAdapter(kategoriProductAdapter);
+        int spinnerPosition = kategoriProductAdapter.getPosition(x);
+        kategoriProduct.setSelection(spinnerPosition);
     }
     public void ItemKategori(String item){
         if(item.equals("clothing")){
@@ -260,6 +317,31 @@ public class AddProductActivity extends AppCompatActivity {
         }
 
     }
+    public void getItemKategori(String item,String value){
+        if(item.equals("clothing")){
+            ArrayAdapter<CharSequence> kategoriProductAdapter = ArrayAdapter
+                    .createFromResource(this, R.array.kategori_clothing,
+                            android.R.layout.simple_spinner_item);
+
+            kategoriProductAdapter
+                    .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            kategoriItem.setAdapter(kategoriProductAdapter);
+            int spinnerPosition = kategoriProductAdapter.getPosition(value);
+            kategoriItem.setSelection(spinnerPosition);
+        }
+        else if(item.equals("electronic")){
+            ArrayAdapter<CharSequence> kategoriProductAdapter = ArrayAdapter
+                    .createFromResource(this, R.array.kategori_electonic,
+                            android.R.layout.simple_spinner_item);
+
+            kategoriProductAdapter
+                    .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            kategoriItem.setAdapter(kategoriProductAdapter);
+            int spinnerPosition = kategoriProductAdapter.getPosition(value);
+            kategoriItem.setSelection(spinnerPosition);
+        }
+
+    }
     public void FilterItemKategori(){
         ArrayAdapter<CharSequence> kategoriProductAdapter = ArrayAdapter
                 .createFromResource(this, R.array.filter_clothing,
@@ -268,6 +350,17 @@ public class AddProductActivity extends AppCompatActivity {
         kategoriProductAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filter.setAdapter(kategoriProductAdapter);
+    }
+    public void getFilterItemKategori(String value){
+        ArrayAdapter<CharSequence> kategoriProductAdapter = ArrayAdapter
+                .createFromResource(this, R.array.filter_clothing,
+                        android.R.layout.simple_spinner_item);
+
+        kategoriProductAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filter.setAdapter(kategoriProductAdapter);
+        int spinnerPosition = kategoriProductAdapter.getPosition(value);
+        filter.setSelection(spinnerPosition);
     }
     public void RegisterActivityForUploadImage(){
         activityResultLauncherForUploadImage= registerForActivityResult(new ActivityResultContracts

@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             style="@style/text_navbar"
             android:text="@string/add_product"
+            android:id="@+id/title_navbar"
             />
     </LinearLayout>
     <ScrollView
@@ -233,6 +234,51 @@
                             />
                     </RelativeLayout>
                 </RelativeLayout>
+                <!--            harga satuan-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/field_decription"
+                    android:layout_below="@+id/field_harga"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="16dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/descriptionPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:lineSpacingExtra="-3sp"
+                        android:text="Deskripsi Product"
+                        android:textAppearance="@style/placeHolderInput"
+                        android:layout_marginBottom="7dp"
+                        />
+                    <RelativeLayout
+                        android:layout_below="@+id/descriptionPlaceHolder"
+                        android:id="@+id/field_input_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/inputfield"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_deskripsi"
+                            style="@style/input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/frame_165"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine"
+                            android:minEms="3"
+                            android:maxEms="10"
+                            android:minHeight="48dp"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
                 <!--            kategori product-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -240,7 +286,7 @@
                     android:orientation="vertical"
                     android:layout_marginTop="20dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_below="@+id/field_harga"
+                    android:layout_below="@+id/field_decription"
                     android:id="@+id/field_kategori_Product"
                     >
 

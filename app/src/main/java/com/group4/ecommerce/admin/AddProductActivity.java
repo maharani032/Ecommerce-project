@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,6 +49,7 @@ public class AddProductActivity extends AppCompatActivity {
     ProgressBar pb;
     CircleImageView cl;
     Button btn;
+    ImageView goback;
     EditText namaProduct,idProduct,kuantitas,harga,deskripsi;
     RelativeLayout fieldKategoriItem,fieldFilter;
 
@@ -84,10 +87,19 @@ public class AddProductActivity extends AppCompatActivity {
         btn=findViewById(R.id.btnaddProduct);
         cl=findViewById(R.id.productImage);
         pb=findViewById(R.id.pb);
+        goback=findViewById(R.id.goback);
         ProductKategori();
 
         firebaseStorage= FirebaseStorage.getInstance();
         storageReference=firebaseStorage.getReference();
+
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
         kategoriProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -198,6 +210,7 @@ public class AddProductActivity extends AppCompatActivity {
                 i.putExtra("filter",filter);
                 i.putExtra("jumlah",jumlah);
                 i.putExtra("description",deskripsi);
+                i.putExtra("timestamp", String.valueOf(ServerValue.TIMESTAMP));
 
                 setResult(RESULT_OK, i);
                 finish();
@@ -222,6 +235,7 @@ public class AddProductActivity extends AppCompatActivity {
                                 i.putExtra("filter",filter);
                                 i.putExtra("jumlah",jumlah);
                                 i.putExtra("description",deskripsi);
+                                i.putExtra("timestamp", String.valueOf(ServerValue.TIMESTAMP));
                                 setResult(RESULT_OK, i);
                                 finish();
                             }

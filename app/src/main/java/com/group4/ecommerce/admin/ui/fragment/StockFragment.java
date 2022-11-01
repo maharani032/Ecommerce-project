@@ -168,6 +168,7 @@ public class StockFragment extends Fragment {
                             String filter=data.getStringExtra("filter");
                             String kuantitas=data.getStringExtra("jumlah");
                             String deskripsi=data.getStringExtra("description");
+                            String timestamp=data.getStringExtra("timestamp");
 
                             if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
                                     kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
@@ -180,6 +181,7 @@ public class StockFragment extends Fragment {
                                 reference.child("Products").child(id).child("filter").setValue(filter);
                                 reference.child("Products").child(id).child("image").setValue(image);
                                 reference.child("Products").child(id).child("description").setValue(deskripsi);
+                                reference.child("Products").child(id).child("timestamp").setValue(timestamp);
                             }
                         }
                     }
@@ -203,6 +205,8 @@ public class StockFragment extends Fragment {
                         String filter=data.getStringExtra("filter");
                         String kuantitas=data.getStringExtra("jumlah");
                         String deskripsi=data.getStringExtra("description");
+                        String timestamp=data.getStringExtra("timestamp");
+
                         if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
                                 kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
                             Map<String, Object> hasMap = new HashMap<>();
@@ -215,6 +219,7 @@ public class StockFragment extends Fragment {
                             hasMap.put("filter",filter);
                             hasMap.put("image",image);
                             hasMap.put("description",deskripsi);
+                            hasMap.put("timestamp",timestamp);
 
                             reference.child("Products").child(id).updateChildren(hasMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

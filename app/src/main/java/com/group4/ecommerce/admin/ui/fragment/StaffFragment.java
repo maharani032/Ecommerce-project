@@ -32,7 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AddStaffActivity;
 import com.group4.ecommerce.admin.adapter.StaffAdapter;
-import com.group4.ecommerce.databinding.FragmentStaffBinding;
+import com.group4.ecommerce.databinding.FragmentStaffAdminBinding;
 import com.group4.ecommerce.model.Staff;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class StaffFragment extends Fragment {
     StorageReference storageReference;
 
     FloatingActionButton fabStaff;
-    private FragmentStaffBinding binding;
+    private FragmentStaffAdminBinding binding;
 
     List<Staff> list=new ArrayList<>();
     StaffAdapter staffAdapter;
@@ -59,7 +59,7 @@ public class StaffFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentStaffBinding.inflate(inflater, container, false);
+        binding = FragmentStaffAdminBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         fabStaff=binding.fabStaff;
@@ -101,7 +101,6 @@ public class StaffFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position=viewHolder.getAdapterPosition();
-                list.get(position);
                 reference.child("Staffs").child(list.get(position).getId()).removeValue();
                 reference.child("Auth").child(list.get(position).getId()).removeValue();
                 if(list.get(position)!=null&&!list.get(position).getImage().equals("String")){

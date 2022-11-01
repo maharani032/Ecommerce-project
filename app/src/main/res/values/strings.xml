@@ -54,4 +54,10 @@
         <item>Men</item>
         <item>Women</item>
     </string-array>
+    <string name="title_activity_dashboard_user">DashboardUserActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="beranda">Home</string>
+    <string name="pengaturan">Setting</string>
 </resources>

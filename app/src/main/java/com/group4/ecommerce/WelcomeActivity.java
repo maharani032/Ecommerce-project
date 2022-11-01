@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AdminActivity;
 import com.group4.ecommerce.model.Auth;
+import com.group4.ecommerce.user.DashboardUserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,20 +77,21 @@ public class WelcomeActivity extends AppCompatActivity {
     }
     public void signIn(String email,String password){
         pb.setVisibility(View.VISIBLE);
-        reference.child("Auth").addValueEventListener(new ValueEventListener() {
+        reference.child("Auth").orderByChild("email").equalTo(email)
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot keys:snapshot.getChildren()){
-                    Auth auth=keys.getValue(Auth.class);
-                    if(keys.child("email").getValue().toString().equals(email)){
-                        id=keys.child("id").getValue().toString();
-                        CheckRole(id,email,password);
-                    }
+                if(snapshot.exists()){
+                    for (DataSnapshot keys:snapshot.getChildren()){
+                        if(keys.child("email").getValue().toString().equals(email)){
+                            id=keys.child("id").getValue().toString();
+                            CheckRole(id,email,password);
+                        }
                 }
-                Log.i("id",id);
-
-                pb.setVisibility(View.INVISIBLE);
-
+                }else if(!snapshot.exists()){
+                    Toast.makeText(WelcomeActivity.this,"email tidak terdaftar",Toast.LENGTH_SHORT).show();
+                    pb.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -110,6 +112,8 @@ public class WelcomeActivity extends AppCompatActivity {
                         preferences.setDataAs(WelcomeActivity.this, "user");
                         preferences.setDataUid(WelcomeActivity.this,auth.getId());
 
+                        Intent userPage=new Intent(WelcomeActivity.this, DashboardUserActivity.class);
+                        startActivity(userPage);
 
                     }
                     else if(auth.getRole().equals("admin")){
@@ -129,7 +133,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(WelcomeActivity.this,"check password & email",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WelcomeActivity.this,"password salah",Toast.LENGTH_SHORT).show();
                 }
             }
 

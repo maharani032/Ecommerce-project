@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_home_admin">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_home_admin"
         android:name="com.group4.ecommerce.admin.ui.fragment.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home_admin" />
 
     <fragment
-        android:id="@+id/nav_staff"
+        android:id="@+id/nav_staff_admin"
         android:name="com.group4.ecommerce.admin.ui.fragment.StaffFragment"
         android:label="@string/staff"
-        tools:layout="@layout/fragment_staff" />
+        tools:layout="@layout/fragment_staff_admin" />
 
     <fragment
-        android:id="@+id/nav_stock"
+        android:id="@+id/nav_stock_admin"
         android:name="com.group4.ecommerce.admin.ui.fragment.StockFragment"
         android:label="@string/stock"
         tools:layout="@layout/fragment_stock" />

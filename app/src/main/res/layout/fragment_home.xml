@@ -1,11 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.ui.fragment.HomeFragment"
-    android:orientation="vertical">
+    tools:context=".user.ui.SettingsFragment"
+    android:layout_margin="7dp"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/banner"/>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/banner"
+                android:id="@+id/navigasi_kategori"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_below="@id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/frame_button"
+                        android:layout_margin="8dp"
+                        android:padding="7dp">
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/bclothings"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:background="@drawable/ic_shirt_solid"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/frame_button"
+                        android:layout_margin="8dp"
+                        android:padding="7dp">
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/belectronics"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/frame_button"
+                        android:layout_margin="8dp"
+                        android:padding="7dp">
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/bbooks"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:background="@drawable/ic_book_open_solid"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/frame_button"
+                        android:layout_margin="8dp"
+                        android:padding="7dp">
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/bothers"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+            <TextView
+                android:id="@+id/newest"
+                android:layout_margin="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/navigasi_kategori"
+                android:text="🔥 Produk Terbaru Hari ini"
+                style="@style/placeHolderInput"
+                android:textSize="18dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newest"
+                android:id="@+id/rvProduct"/>
+        </RelativeLayout>
+
+    </ScrollView>
 
 
-</LinearLayout>
+
+
+</RelativeLayout>

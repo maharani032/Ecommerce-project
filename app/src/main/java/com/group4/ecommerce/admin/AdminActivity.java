@@ -47,7 +47,6 @@ public class AdminActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.getMenu().findItem(R.id.nav_signout).setOnMenuItemClickListener(menuItem -> {
-            FirebaseAuth.getInstance().signOut();
             Intent i= new Intent(AdminActivity.this, WelcomeActivity.class);
             preferences.clearData(this);
             startActivity(i);

@@ -1,4 +1,4 @@
-package com.group4.ecommerce.admin.adapter;
+package com.group4.ecommerce.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

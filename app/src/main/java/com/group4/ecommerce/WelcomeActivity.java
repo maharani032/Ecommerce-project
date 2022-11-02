@@ -153,6 +153,8 @@ public class WelcomeActivity extends AppCompatActivity {
             }else if(preferences.getDataAs(this).equals("user")){
                 startActivity(new Intent(this, DashboardUserActivity.class));
                 finish();
+            }else if(preferences.getDataAs(this).equals("staff")){
+//                pindah halaman staff
             }
         }
     }

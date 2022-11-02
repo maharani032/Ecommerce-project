@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
     tools:context=".user.ui.SettingsFragment"
     android:layout_margin="7dp"
     >
@@ -16,67 +17,120 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:background="@drawable/banner_2"
                 android:id="@+id/banner"/>
+
             <HorizontalScrollView
+                android:id="@+id/navigasi_kategori"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/banner"
-                android:id="@+id/navigasi_kategori"
                 android:scrollbars="none">
+
                 <LinearLayout
-                    android:layout_below="@id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/banner"
                     android:orientation="horizontal"
                     android:padding="10dp"
-                    >
+                    android:layout_gravity="center_horizontal">
+
                     <LinearLayout
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:background="@drawable/frame_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp"
+                        android:background="@drawable/frame_button"
+                        android:orientation="vertical"
                         android:padding="7dp">
+
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/bclothings"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:background="@drawable/ic_shirt_solid"
-                            />
+                            android:backgroundTint="#2B3C51" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="fashion"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textSize="9dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:background="@drawable/frame_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp"
+                        android:background="@drawable/frame_button"
+                        android:orientation="vertical"
                         android:padding="7dp">
+
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/belectronics"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"/>
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:backgroundTint="#2B3C51"
+                            android:background="@drawable/ic_computer_solid"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Electronic"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textSize="9dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:background="@drawable/frame_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp"
+                        android:background="@drawable/frame_button"
+                        android:orientation="vertical"
                         android:padding="7dp">
+
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/bbooks"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:background="@drawable/ic_book_open_solid"
-                            />
+                            android:backgroundTint="#2B3C51" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Books"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textSize="9dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:background="@drawable/frame_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="8dp"
+                        android:background="@drawable/frame_button"
+                        android:orientation="vertical"
                         android:padding="7dp">
+
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/bothers"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"/>
+                            android:id="@+id/others"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/ic_comment_dots_solid"
+                            android:backgroundTint="#2B3C51" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="other"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textSize="9dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -87,14 +141,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/navigasi_kategori"
-                android:text="🔥 Produk Terbaru Hari ini"
+                android:text="@string/product_newest"
                 style="@style/placeHolderInput"
                 android:textSize="18dp"/>
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProduct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/newest"
-                android:id="@+id/rvProduct"/>
+                android:layout_below="@+id/newest" />
         </RelativeLayout>
 
     </ScrollView>

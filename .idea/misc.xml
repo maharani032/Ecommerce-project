@@ -37,14 +37,16 @@
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_user_page.xml" value="0.1984375" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/app_bar_admin.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/card_product.xml" value="0.33" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/card_product_user.xml" value="0.18" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/card_products.xml" value="0.12129629629629629" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/card_staff.xml" value="0.35555555555555557" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/content_admin.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_dashboard.xml" value="0.20555555555555555" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_gallery.xml" value="0.2125" />
-        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_home_admin.xml" value="0.12129629629629629" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_notifications.xml" value="0.20555555555555555" />
-        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_settings.xml" value="0.12129629629629629" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_sign_out.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_slideshow.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_staff.xml" value="0.21" />

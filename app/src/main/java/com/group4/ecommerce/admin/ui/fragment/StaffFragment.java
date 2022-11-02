@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AddStaffActivity;
-import com.group4.ecommerce.admin.adapter.StaffAdapter;
+import com.group4.ecommerce.adapter.StaffAdapter;
 import com.group4.ecommerce.databinding.FragmentStaffAdminBinding;
 import com.group4.ecommerce.model.Staff;
 

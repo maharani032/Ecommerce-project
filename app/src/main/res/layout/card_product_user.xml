@@ -44,6 +44,7 @@
             android:id="@+id/hargaProduct"
             style="@style/smalltext"
             android:textStyle="bold"
+            android:textSize="11sp"
             android:textAlignment="textEnd"/>
     </RelativeLayout>
 

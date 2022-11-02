@@ -1,12 +1,14 @@
 package com.group4.ecommerce.model;
 
 public class Product {
-    String id,image,name,jumlah,harga,filter,kategori,description,kategoriItem, timestamp;
+    String id,image,name,jumlah,harga,filter,kategori,description,kategoriItem;
+    Long timestamp;
     public Product(){
 
     }
     public Product(String id, String image, String name, String jumlah, String harga, String filter
-            ,String kategoriItem, String kategori, String description, String timestamp) {
+            ,String kategoriItem, String kategori, String description, Long timestamp
+    ) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -91,11 +93,11 @@ public class Product {
         this.description = description;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 }

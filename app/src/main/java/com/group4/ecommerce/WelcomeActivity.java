@@ -150,6 +150,9 @@ public class WelcomeActivity extends AppCompatActivity {
             if (preferences.getDataAs(this).equals("admin")) {
                 startActivity(new Intent(this, AdminActivity.class));
                 finish();
+            }else if(preferences.getDataAs(this).equals("user")){
+                startActivity(new Intent(this, DashboardUserActivity.class));
+                finish();
             }
         }
     }

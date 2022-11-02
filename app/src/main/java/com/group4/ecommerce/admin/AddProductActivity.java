@@ -29,12 +29,17 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.group4.ecommerce.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,7 +48,8 @@ public class AddProductActivity extends AppCompatActivity {
 
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-
+    DatabaseReference reference;
+    FirebaseDatabase database;
     TextView titlenavbar;
     Spinner kategoriProduct,kategoriItem,filter;
     ProgressBar pb;
@@ -92,12 +98,13 @@ public class AddProductActivity extends AppCompatActivity {
 
         firebaseStorage= FirebaseStorage.getInstance();
         storageReference=firebaseStorage.getReference();
+        database= FirebaseDatabase.getInstance();
+        reference= database.getReference();
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_CANCELED);
-                finish();
+                onBackPressed();
             }
         });
         kategoriProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -137,45 +144,50 @@ public class AddProductActivity extends AppCompatActivity {
             public void onClick(View view) {
                 pb.setVisibility(View.VISIBLE);
                 String id=idProduct.getText().toString();
-                String nameProduct=namaProduct.getText().toString();
-                String inputCategori=kategoriProduct.getSelectedItem().toString();
-                String inputDeskripsi=deskripsi.getText().toString();
-                String kuantitasProduct=kuantitas.getText().toString();
-                String hargaProduct=harga.getText().toString();
-                if(imageControl==false ||
-                        selectedImage==null||
-                        id==null||
-                        nameProduct==null||
-                        inputCategori==null||
-                        hargaProduct==null||
-                        kuantitasProduct==null||
-                        inputDeskripsi==null){
+                Intent i=getIntent();
+                String oldId=i.getStringExtra("id");
+                if(oldId!=null &&!id.equals(oldId)){
+                    Toast.makeText(AddProductActivity.this, "id tidak bisa diganti. Mohon buat baru product", Toast.LENGTH_SHORT).show();
                     pb.setVisibility(View.INVISIBLE);
-                    Toast.makeText(AddProductActivity.this
-                            ,"harus ada gambar, nama product,kategori,kuantitas,harga,dekripsi barang"
-                            ,Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String inputFilter=(inputCategori.equals("Book")||
-                        inputCategori.equals("Other")?
-                        "-"
-                        :filter.getSelectedItem().toString()
-                        );
-                String inputCategoriItem=(
-                        inputCategori.equals("Book")||
-                                inputCategori.equals("Other")?
-                                "-"
-                                :kategoriItem.getSelectedItem().toString()
-                        );
-
-                if(checkProduct){
-                    pb.setVisibility(View.INVISIBLE);
-                    Toast.makeText(AddProductActivity.this,"ada id yg sama",Toast.LENGTH_SHORT).show();
                     return;
                 }else{
-                    uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
-                            ,inputCategoriItem,inputDeskripsi);
+                    String nameProduct=namaProduct.getText().toString();
+                    String inputCategori=kategoriProduct.getSelectedItem().toString();
+                    String inputDeskripsi=deskripsi.getText().toString();
+                    String kuantitasProduct=kuantitas.getText().toString();
+                    String hargaProduct=harga.getText().toString();
+                    if(imageControl==false ||
+                            selectedImage==null||
+                            id==null||
+                            nameProduct==null||
+                            inputCategori==null||
+                            hargaProduct==null||
+                            kuantitasProduct==null||
+                            inputDeskripsi==null){
+                        pb.setVisibility(View.INVISIBLE);
+                        Toast.makeText(AddProductActivity.this
+                                ,"harus ada gambar, nama product,kategori,kuantitas,harga,dekripsi barang"
+                                ,Toast.LENGTH_SHORT).show();
+                        return;
+                            }
+                        String inputFilter=(inputCategori.equals("Book")||
+                                inputCategori.equals("Other")?
+                                "-"
+                                :filter.getSelectedItem().toString());
+                        String inputCategoriItem=(
+                                inputCategori.equals("Book")|| inputCategori.equals("Other")
+                                        ? "-"
+                                        :kategoriItem.getSelectedItem().toString());
+                        if(checkProduct){
+                            pb.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AddProductActivity.this,"ada id yg sama",Toast.LENGTH_SHORT).show();
+                            return;
+                        }else{
+                            uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
+                                    ,inputCategoriItem,inputDeskripsi);
+                        }
                 }
+
 
             }
         });
@@ -197,27 +209,31 @@ public class AddProductActivity extends AppCompatActivity {
                            String hargabarang,String filter,String itemkategori,String deskripsi
     ) {
             Log.i("update",selectedImage.toString());
+//            kalau sudah upload file ke firebase
             if(selectedImage.toString().contains("https://firebasestorage.googleapis.com"))
             {
-                Log.i("update","gambar tidak upload ulang");
-                Intent i = new Intent();
-                i.putExtra("id", id);
-                i.putExtra("image", selectedImage.toString());
-                i.putExtra("name",nama);
-                i.putExtra("harga",hargabarang);
-                i.putExtra("kategori",kategori);
-                i.putExtra("kategoriItem",itemkategori);
-                i.putExtra("filter",filter);
-                i.putExtra("jumlah",jumlah);
-                i.putExtra("description",deskripsi);
-                i.putExtra("timestamp", String.valueOf(ServerValue.TIMESTAMP));
+                    Log.i("update","gambar tidak upload ulang");
+                    HashMap<String, Map<String, String>> hashMap = new HashMap<>();
+                    hashMap.put("timestamp", ServerValue.TIMESTAMP);
+                    Intent i=getIntent();
+                    i.putExtra("id", id);
+                    i.putExtra("image", selectedImage.toString());
+                    i.putExtra("name",nama);
+                    i.putExtra("harga",hargabarang);
+                    i.putExtra("kategori",kategori);
+                    i.putExtra("kategoriItem",itemkategori);
+                    i.putExtra("filter",filter);
+                    i.putExtra("jumlah",jumlah);
+                    i.putExtra("description",deskripsi);
+                    i.putExtra("timestamp", hashMap);
 
-                setResult(RESULT_OK, i);
-                finish();
+                    setResult(RESULT_OK, i);
+                    finish();
+
             }
             else {
                 Log.i("update","upload foto");
-                String imageName = "product/" + id+ " - " + nama + ".jpg";
+                String imageName = "product/" + "Product" + " - " + id + ".jpg";
                 storageReference.child(imageName).putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -225,6 +241,8 @@ public class AddProductActivity extends AppCompatActivity {
                         myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                HashMap<String, Map<String, String>> hashMap = new HashMap<>();
+                                hashMap.put("timestamp", ServerValue.TIMESTAMP);
                                 Intent i = new Intent();
                                 i.putExtra("id", id);
                                 i.putExtra("image", uri.toString());
@@ -235,7 +253,7 @@ public class AddProductActivity extends AppCompatActivity {
                                 i.putExtra("filter",filter);
                                 i.putExtra("jumlah",jumlah);
                                 i.putExtra("description",deskripsi);
-                                i.putExtra("timestamp", String.valueOf(ServerValue.TIMESTAMP));
+                                i.putExtra("timestamp", hashMap);
                                 setResult(RESULT_OK, i);
                                 finish();
                             }
@@ -268,6 +286,7 @@ public class AddProductActivity extends AppCompatActivity {
         deskripsi.setText(dProduct);
         Picasso.get().load(image).into(cl);
         selectedImage=Uri.parse(image);
+        idProduct.setFocusable(false);
         imageControl=true;
         titlenavbar.setText("Update Product");
         btn.setText("Update Product");

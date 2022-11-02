@@ -87,13 +87,11 @@ public class AddStaffActivity extends AppCompatActivity {
 
         pb=findViewById(R.id.pb);
         titlenavbar=findViewById(R.id.title_navbar);
-        Intent i=getIntent();
 
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_CANCELED);
-                finish();
+                onBackPressed();
             }
         });
         addStaff.setOnClickListener(new View.OnClickListener() {

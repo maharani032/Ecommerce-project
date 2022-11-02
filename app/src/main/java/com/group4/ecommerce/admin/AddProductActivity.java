@@ -29,9 +29,12 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -59,7 +62,7 @@ public class AddProductActivity extends AppCompatActivity {
     EditText namaProduct,idProduct,kuantitas,harga,deskripsi;
     RelativeLayout fieldKategoriItem,fieldFilter;
 
-    boolean imageControl=false,checkProduct=false;
+    boolean imageControl=false;
     Uri selectedImage;
 
     @Override
@@ -145,54 +148,64 @@ public class AddProductActivity extends AppCompatActivity {
                 pb.setVisibility(View.VISIBLE);
                 String id=idProduct.getText().toString();
                 Intent i=getIntent();
-                String oldId=i.getStringExtra("id");
-                if(oldId!=null &&!id.equals(oldId)){
-                    Toast.makeText(AddProductActivity.this, "id tidak bisa diganti. Mohon buat baru product", Toast.LENGTH_SHORT).show();
+                String OldId=i.getStringExtra("id");
+
+                String nameProduct=namaProduct.getText().toString();
+                String inputCategori=kategoriProduct.getSelectedItem().toString();
+                String inputDeskripsi=deskripsi.getText().toString();
+                String kuantitasProduct=kuantitas.getText().toString();
+                String hargaProduct=harga.getText().toString();
+                String inputFilter=(inputCategori.equals("Book")||
+                        inputCategori.equals("Other")?
+                        "-"
+                        :filter.getSelectedItem().toString());
+                String inputCategoriItem=(
+                        inputCategori.equals("Book")|| inputCategori.equals("Other")
+                                ? "-"
+                                :kategoriItem.getSelectedItem().toString());
+
+                if(imageControl==false ||
+                        selectedImage==null||
+                        id==null||
+                        nameProduct==null||
+                        inputCategori==null||
+                        hargaProduct==null||
+                        kuantitasProduct==null||
+                        inputDeskripsi==null){
                     pb.setVisibility(View.INVISIBLE);
+                    Toast.makeText(AddProductActivity.this
+                            ,"harus ada gambar, nama product,kategori,kuantitas,harga,dekripsi barang"
+                            ,Toast.LENGTH_SHORT).show();
                     return;
-                }else{
-                    String nameProduct=namaProduct.getText().toString();
-                    String inputCategori=kategoriProduct.getSelectedItem().toString();
-                    String inputDeskripsi=deskripsi.getText().toString();
-                    String kuantitasProduct=kuantitas.getText().toString();
-                    String hargaProduct=harga.getText().toString();
-                    if(imageControl==false ||
-                            selectedImage==null||
-                            id==null||
-                            nameProduct==null||
-                            inputCategori==null||
-                            hargaProduct==null||
-                            kuantitasProduct==null||
-                            inputDeskripsi==null){
-                        pb.setVisibility(View.INVISIBLE);
-                        Toast.makeText(AddProductActivity.this
-                                ,"harus ada gambar, nama product,kategori,kuantitas,harga,dekripsi barang"
-                                ,Toast.LENGTH_SHORT).show();
-                        return;
+                }
+
+                if(OldId==null){
+                    reference.child("Products").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                Toast.makeText(AddProductActivity.this, "id telah digunakan", Toast.LENGTH_SHORT).show();
+                                pb.setVisibility(View.INVISIBLE);
+                                return;
+                            }else {
+                                uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
+                                        ,inputCategoriItem,inputDeskripsi);
                             }
-                        String inputFilter=(inputCategori.equals("Book")||
-                                inputCategori.equals("Other")?
-                                "-"
-                                :filter.getSelectedItem().toString());
-                        String inputCategoriItem=(
-                                inputCategori.equals("Book")|| inputCategori.equals("Other")
-                                        ? "-"
-                                        :kategoriItem.getSelectedItem().toString());
-                        if(checkProduct){
-                            pb.setVisibility(View.INVISIBLE);
-                            Toast.makeText(AddProductActivity.this,"ada id yg sama",Toast.LENGTH_SHORT).show();
-                            return;
-                        }else{
-                            uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
-                                    ,inputCategoriItem,inputDeskripsi);
                         }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }else if(OldId!=null){
+                    uploadFoto(id,nameProduct,inputCategori,kuantitasProduct,hargaProduct,inputFilter
+                            ,inputCategoriItem,inputDeskripsi);
+                }
                 }
 
 
-            }
-        });
-
-
+            });
     }
     private void choosePhoto() {
         if (ContextCompat.checkSelfPermission(AddProductActivity.this

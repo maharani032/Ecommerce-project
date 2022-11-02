@@ -53,7 +53,7 @@ public class ProductUserAdapter extends RecyclerView.Adapter<ProductUserAdapter.
         holder.namaProduct.setText(product.getName());
         double harga=Double.parseDouble(product.getHarga());
         DecimalFormat formatter = new DecimalFormat("#,###.00");
-        holder.hargaProduct.setText(formatter.format(harga));
+        holder.hargaProduct.setText("Rp "+formatter.format(harga));
         if(product.getImage()!=null&&!product.getImage().equals("String")){
             Picasso.get().load(product.getImage()).into(holder.imageProduct);
         }

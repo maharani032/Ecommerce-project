@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AddProductActivity;
-import com.group4.ecommerce.admin.adapter.ProductAdapter;
+import com.group4.ecommerce.adapter.ProductAdapter;
 import com.group4.ecommerce.databinding.FragmentStockBinding;
 import com.group4.ecommerce.model.Product;
 
@@ -97,7 +97,7 @@ public class StockFragment extends Fragment {
                 int position=viewHolder.getAdapterPosition();
                 reference.child("Products").child(list.get(position).getId()).removeValue();
                 if(list.get(position)!=null&&!list.get(position).getImage().equals("String")){
-                    String imageName = "product/" + list.get(position).getId()+ " - " + list.get(position).getName() + ".jpg";
+                    String imageName = "product/Product"+ " - " + list.get(position).getId() + ".jpg";
                     storageReference.child(imageName).delete();
                 }
                 Toast.makeText(getContext(), "data has been delete", Toast.LENGTH_SHORT).show();
@@ -168,8 +168,10 @@ public class StockFragment extends Fragment {
                             String filter=data.getStringExtra("filter");
                             String kuantitas=data.getStringExtra("jumlah");
                             String deskripsi=data.getStringExtra("description");
-                            String timestamp=data.getStringExtra("timestamp");
+//                            String timestamp=data.getStringExtra("timestamp");
 
+                            HashMap<String, String> hashMap = (HashMap<String, String>)data.getSerializableExtra("timestamp");
+                            Log.i("hashmap",hashMap.toString());
                             if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
                                     kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
                                 reference.child("Products").child(id).child("id").setValue(id);
@@ -181,7 +183,7 @@ public class StockFragment extends Fragment {
                                 reference.child("Products").child(id).child("filter").setValue(filter);
                                 reference.child("Products").child(id).child("image").setValue(image);
                                 reference.child("Products").child(id).child("description").setValue(deskripsi);
-                                reference.child("Products").child(id).child("timestamp").setValue(timestamp);
+                                reference.child("Products").child(id).child("timestamp").setValue(hashMap.get("timestamp"));
                             }
                         }
                     }
@@ -195,40 +197,42 @@ public class StockFragment extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         int ResultCode=result.getResultCode();
                         Intent data=result.getData();
+                        if(ResultCode==RESULT_OK&&data!=null){
+                            String id=data.getStringExtra("id");
+                            String image=data.getStringExtra("image");
+                            String nama=data.getStringExtra("name");
+                            String harga=data.getStringExtra("harga");
+                            String kbarang=data.getStringExtra("kategori");
+                            String kitem=data.getStringExtra("kategoriItem");
+                            String filter=data.getStringExtra("filter");
+                            String kuantitas=data.getStringExtra("jumlah");
+                            String deskripsi=data.getStringExtra("description");
+                            String timestamp=data.getStringExtra("timestamp");
 
-                        String id=data.getStringExtra("id");
-                        String image=data.getStringExtra("image");
-                        String nama=data.getStringExtra("name");
-                        String harga=data.getStringExtra("harga");
-                        String kbarang=data.getStringExtra("kategori");
-                        String kitem=data.getStringExtra("kategoriItem");
-                        String filter=data.getStringExtra("filter");
-                        String kuantitas=data.getStringExtra("jumlah");
-                        String deskripsi=data.getStringExtra("description");
-                        String timestamp=data.getStringExtra("timestamp");
+                            if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
+                                    kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
+                                Map<String, Object> hasMap = new HashMap<>();
+                                hasMap.put("id",id);
+                                hasMap.put("name",nama);
+                                hasMap.put("kategori",kbarang);
+                                hasMap.put("kategoriItem",kitem);
+                                hasMap.put("harga",harga);
+                                hasMap.put("jumlah",kuantitas);
+                                hasMap.put("filter",filter);
+                                hasMap.put("image",image);
+                                hasMap.put("description",deskripsi);
+                                hasMap.put("timestamp",timestamp);
 
-                        if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
-                                kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
-                            Map<String, Object> hasMap = new HashMap<>();
-                            hasMap.put("id",id);
-                            hasMap.put("name",nama);
-                            hasMap.put("kategori",kbarang);
-                            hasMap.put("kategoriItem",kitem);
-                            hasMap.put("harga",harga);
-                            hasMap.put("jumlah",kuantitas);
-                            hasMap.put("filter",filter);
-                            hasMap.put("image",image);
-                            hasMap.put("description",deskripsi);
-                            hasMap.put("timestamp",timestamp);
+                                reference.child("Products").child(id).updateChildren(hasMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getContext(),"product telah diupdate",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                            reference.child("Products").child(id).updateChildren(hasMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(),"product telah diupdate",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
+                            }
                         }
+
                     }
                 }
         );

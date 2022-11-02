@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -207,7 +208,6 @@ public class StockFragment extends Fragment {
                             String filter=data.getStringExtra("filter");
                             String kuantitas=data.getStringExtra("jumlah");
                             String deskripsi=data.getStringExtra("description");
-                            String timestamp=data.getStringExtra("timestamp");
 
                             if(id!=null&&image!=null&&nama!=null&&harga!=null&&kbarang!=null&&
                                     kitem!=null&&filter!=null&&kuantitas!=null&&deskripsi!=null){
@@ -221,7 +221,7 @@ public class StockFragment extends Fragment {
                                 hasMap.put("filter",filter);
                                 hasMap.put("image",image);
                                 hasMap.put("description",deskripsi);
-                                hasMap.put("timestamp",timestamp);
+                                hasMap.put("timestamp", ServerValue.TIMESTAMP);
 
                                 reference.child("Products").child(id).updateChildren(hasMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

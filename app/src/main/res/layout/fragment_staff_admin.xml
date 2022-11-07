@@ -18,6 +18,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="50dp"
         android:layout_weight="1"
+        android:contentDescription="add staff"
         android:clickable="true"
         android:backgroundTint="@color/green_500"
         android:src="@drawable/ic_baseline_person_add_24" />

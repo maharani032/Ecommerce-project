@@ -20,6 +20,7 @@
         android:layout_margin="50dp"
         android:layout_weight="1"
         android:clickable="true"
+        android:contentDescription="@string/add_product"
         android:backgroundTint="@color/green_500"
         android:src="@drawable/ic_baseline_person_add_24" />
 </RelativeLayout>

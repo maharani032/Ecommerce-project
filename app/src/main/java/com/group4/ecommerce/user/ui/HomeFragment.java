@@ -1,9 +1,12 @@
 package com.group4.ecommerce.user.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,17 +35,72 @@ public class HomeFragment extends Fragment {
     RecyclerView rvProduct;
     List<Product> list=new ArrayList<>();
     ProductUserAdapter adapter;
-
+    TextView allList;
     DatabaseReference reference;
     FirebaseDatabase database;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+    LinearLayout btnFashion,btnElectronic,btnBooks,btnOthers;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        allList=binding.allItem;
+        btnBooks=binding.BtnBooks;
+        btnFashion=binding.btnFashion;
+        btnElectronic=binding.btnelectronic;
+        btnOthers=binding.btnOthers;
+        allList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),ListProductActivity.class);
+                i.putExtra("type","all");
+                i.putExtra("navbarName","Product Terbaru🔥🔥");
+                startActivity(i);
+            }
+        });
+//        <item>Clothing</item>
+//        <item>Electronic</item>
+//        <item>Book</item>
+//        <item>other</item>
+        btnFashion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),ListProductActivity.class);
+                i.putExtra("type","Clothing");
+                i.putExtra("navbarName","Product Fashions");
+                startActivity(i);
+            }
+        });
+        btnBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),ListProductActivity.class);
+                i.putExtra("type","Book");
+                i.putExtra("navbarName","Product Books");
+                startActivity(i);
+            }
+        });
+        btnElectronic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),ListProductActivity.class);
+                i.putExtra("type","Electronic");
+                i.putExtra("navbarName","Product Eletronics");
+                startActivity(i);
+            }
+        });
+        btnOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),ListProductActivity.class);
+                i.putExtra("type","other");
+                i.putExtra("navbarName","Product");
+                startActivity(i);
+            }
+        });
 
         return binding.getRoot();
     }

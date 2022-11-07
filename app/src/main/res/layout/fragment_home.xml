@@ -36,6 +36,7 @@
                     android:layout_gravity="center_horizontal">
 
                     <LinearLayout
+                        android:id="@+id/btnFashion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -44,7 +45,6 @@
                         android:padding="7dp">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/bclothings"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:background="@drawable/ic_shirt_solid"
@@ -61,6 +61,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btnelectronic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -69,7 +70,7 @@
                         android:padding="7dp">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/belectronics"
+                            android:id="@+id/BtnElectronics"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:backgroundTint="#2B3C51"
@@ -86,6 +87,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/BtnBooks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -110,6 +112,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btnOthers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -135,16 +138,31 @@
 
                 </LinearLayout>
             </HorizontalScrollView>
-            <TextView
-                android:id="@+id/newest"
-                android:layout_margin="7dp"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_below="@+id/navigasi_kategori"
-                android:text="@string/product_newest"
-                style="@style/placeHolderInput"
-                android:textSize="18dp"/>
-
+                android:layout_margin="7dp"
+                android:id="@+id/newest">
+                <TextView
+                    style="@style/placeHolderInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_newest"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lihat semua"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/green_500"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textSize="12sp"
+                    android:id="@+id/allItem"/>
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProduct"
                 android:layout_width="match_parent"

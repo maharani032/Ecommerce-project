@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_popup"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:id="@+id/field_kategori_item"
+        >
+        <TextView
+            android:id="@+id/kategoriItemPlaceHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:gravity="top"
+            android:lineSpacingExtra="-3sp"
+            android:text="@string/kategori_item"
+            android:textAppearance="@style/placeHolderInput" />
+        <RelativeLayout
+            android:layout_below="@id/kategoriItemPlaceHolder"
+            android:id="@+id/field_input_kategori_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inputfield"
+            >
+            <Spinner
+                android:id="@+id/input_kategori_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:spinnerMode="dropdown"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <!--            filter item-->
+    <RelativeLayout
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_below="@+id/field_kategori_item"
+        android:id="@+id/field_filter"
+        >
+
+        <TextView
+            android:id="@+id/filterPlaceHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:gravity="top"
+            android:lineSpacingExtra="-3sp"
+            android:text="For"
+            android:textAppearance="@style/placeHolderInput" />
+        <RelativeLayout
+            android:layout_below="@id/filterPlaceHolder"
+            android:id="@+id/field_input_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/inputfield"
+            >
+
+            <Spinner
+                android:id="@+id/input_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:spinnerMode="dropdown" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_below="@+id/field_filter"
+        android:gravity="end">
+        <TextView
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            style="@style/smalltext"
+            android:textColor="@color/black"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:layout_marginEnd="15dp"/>
+        <TextView
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@color/black"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"/>
+    </LinearLayout>
+
+</RelativeLayout>

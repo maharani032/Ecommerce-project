@@ -6,3 +6,8 @@
 Email : admin1@gmail.com
 Password: 123456
 ```
+**Login as User**
+```
+Email : user1@gmail.com
+Password: 123456
+```

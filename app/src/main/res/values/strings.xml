@@ -43,7 +43,6 @@
         <item>T-Shirt</item>
         <item>Jacket</item>
         <item>Shorts</item>
-        <item>Pants</item>
         <item>Other</item>
     </string-array>
     <string-array name="kategori_electonic">

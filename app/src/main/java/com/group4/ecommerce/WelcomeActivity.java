@@ -30,7 +30,7 @@ import java.util.List;
 public class WelcomeActivity extends AppCompatActivity {
     private EditText inputEmail,inputPassword ;
     private Button buttonSignIn;
-    private TextView daftar;
+    private TextView daftar,about;
     private ProgressBar pb;
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -50,13 +50,20 @@ public class WelcomeActivity extends AppCompatActivity {
         inputPassword=findViewById(R.id.input_password);
         buttonSignIn=findViewById(R.id.buttonlogin);
         daftar=findViewById(R.id.daftar);
+        about=findViewById(R.id.about);
         pb=findViewById(R.id.pb);
         database= FirebaseDatabase.getInstance();
         reference=database.getReference();
         firebaseStorage= FirebaseStorage.getInstance();
         storageReference=firebaseStorage.getReference();
 
-
+about.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent i=new Intent(WelcomeActivity.this, AboutActivity.class);
+        startActivity(i);
+    }
+});
         daftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

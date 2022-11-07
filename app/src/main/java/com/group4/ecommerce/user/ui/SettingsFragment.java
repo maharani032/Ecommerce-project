@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.group4.ecommerce.AboutActivity;
 import com.group4.ecommerce.WelcomeActivity;
 import com.group4.ecommerce.databinding.FragmentSettingsBinding;
 import com.group4.ecommerce.preferences;
@@ -18,18 +19,26 @@ import com.group4.ecommerce.preferences;
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
-    LinearLayout SignOutLayout;
+    LinearLayout SignOutLayout,InfoLayout;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         SignOutLayout=binding.SignOutLayout;
+        InfoLayout=binding.Informasi;
         SignOutLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getContext(), WelcomeActivity.class);
                 preferences.clearData(getContext());
+                startActivity(i);
+            }
+        });
+        InfoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i= new Intent(getContext(), AboutActivity.class);
                 startActivity(i);
             }
         });

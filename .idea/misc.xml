@@ -34,6 +34,7 @@
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_add_staff.xml" value="0.33" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_admin.xml" value="0.13148148148148148" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_dashboard_user.xml" value="0.20555555555555555" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_detail_product.xml" value="0.33" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_list_product.xml" value="0.33" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/activity_main.xml" value="0.33" />
@@ -56,6 +57,7 @@
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_sign_out.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_slideshow.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_staff.xml" value="0.21" />
+        <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_staff_admin.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/fragment_stock.xml" value="0.11388888888888889" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/nav_header_admin.xml" value="0.2125" />
         <entry key="..\:/Program/AndroidJava/ecommerce/app/src/main/res/layout/sign_in.xml" value="0.25" />

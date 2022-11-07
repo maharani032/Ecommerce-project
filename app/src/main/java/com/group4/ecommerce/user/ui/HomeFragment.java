@@ -118,6 +118,23 @@ public class HomeFragment extends Fragment {
         rvProduct.setLayoutManager(new GridLayoutManager(requireActivity(),2));
         list=new ArrayList<>();
         adapter=new ProductUserAdapter(list,getContext());
+        adapter.setOnItemClickListener(new ProductUserAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Product product) {
+                Intent i=new Intent(getContext(),DetailProductActivity.class);
+                i.putExtra("name",product.getName());
+                i.putExtra("image",product.getImage());
+                i.putExtra("jumlah",product.getJumlah());
+                i.putExtra("harga",product.getHarga());
+                i.putExtra("filter",product.getFilter());
+                i.putExtra("kategori",product.getKategori());
+                i.putExtra("id",product.getId());
+                i.putExtra("timestamp",product.getTimestamp().toString());
+                i.putExtra("kategoriItem",product.getKategoriItem());
+                i.putExtra("description",product.getDescription());
+                startActivity(i);
+            }
+        });
         rvProduct.setAdapter(adapter);
 
         reference.child("Products").orderByChild("timestamp").limitToLast(4).addValueEventListener(new ValueEventListener() {

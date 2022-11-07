@@ -12,6 +12,7 @@
         android:layout_centerInParent="true"
         android:visibility="invisible"
         android:defaultFocusHighlightEnabled="true"
+        android:translationZ="10dp"
         />
     <LinearLayout
         android:id="@+id/navbar_add_staff"

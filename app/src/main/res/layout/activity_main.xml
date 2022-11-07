@@ -14,7 +14,8 @@
         android:layout_gravity="center"
         android:defaultFocusHighlightEnabled="true"
         android:visibility="invisible"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:translationZ="10dp"/>
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"

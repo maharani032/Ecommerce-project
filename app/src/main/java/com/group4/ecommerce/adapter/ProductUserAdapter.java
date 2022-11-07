@@ -79,12 +79,22 @@ public class ProductUserAdapter extends RecyclerView.Adapter<ProductUserAdapter.
             namaProduct=itemView.findViewById(R.id.namaProduct);
             hargaProduct=itemView.findViewById(R.id.hargaProduct);
             dateProduct=itemView.findViewById(R.id.dateProduct);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+
+                    if(listenerClick!=null &&position!=RecyclerView.NO_POSITION){
+                        listenerClick.onItemClick(productList.get(position));
+                    }
+                }
+            });
         }
 
     } public interface OnItemClickListener{
         void onItemClick(Product product);
     }
-    public void setOnItemClickListenerUpdate(ProductUserAdapter.OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener){
         this.listenerClick=listener;
     }
 }

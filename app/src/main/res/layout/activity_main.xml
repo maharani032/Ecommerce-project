@@ -16,6 +16,7 @@
         android:visibility="invisible"
         android:layout_centerInParent="true"/>
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
@@ -154,8 +155,25 @@
                 android:textAlignment="center"
                 />
         </LinearLayout>
-    </LinearLayout>
 
+
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tentang"
+        android:textAlignment="center"
+        android:textColor="#7B8794"
+        android:textStyle="bold"
+
+        android:textSize="16sp"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.96sp"
+        android:paddingBottom="10dp"
+        android:layout_alignParentBottom="true"/>
 
 
 

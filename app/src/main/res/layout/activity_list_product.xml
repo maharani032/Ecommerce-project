@@ -37,18 +37,29 @@
         android:id="@+id/fabFilter"
         android:background="@drawable/background_fab"
         android:paddingHorizontal="10dp"
-        android:paddingVertical="5dp"
+        android:paddingVertical="6dp"
         android:translationZ="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Filter"
-            android:elevation="16dp"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            />
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_filter_solid"
+                android:scaleType="fitXY"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:text="Filter"
+                android:paddingLeft="10dp"
+                android:elevation="16dp"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                />
+        </LinearLayout>
+
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView

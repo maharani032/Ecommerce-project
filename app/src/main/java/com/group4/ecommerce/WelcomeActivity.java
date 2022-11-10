@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group4.ecommerce.admin.AdminActivity;
 import com.group4.ecommerce.model.Auth;
+import com.group4.ecommerce.staff.StaffActivity;
 import com.group4.ecommerce.user.DashboardUserActivity;
 
 import java.util.ArrayList;
@@ -142,6 +143,9 @@ about.setOnClickListener(new View.OnClickListener() {
                         preferences.setDataAs(WelcomeActivity.this, "staff");
                         preferences.setDataUid(WelcomeActivity.this,auth.getId());
                         Log.i("login", "halaman staff");
+
+                        Intent staffPage=new Intent(WelcomeActivity.this, StaffActivity.class);
+                        startActivity(staffPage);
                     }
                 }
                 else {
@@ -169,6 +173,8 @@ about.setOnClickListener(new View.OnClickListener() {
                 finish();
             }else if(preferences.getDataAs(this).equals("staff")){
 //                pindah halaman staff
+                startActivity(new Intent(this,StaffActivity.class));
+                finish();
             }
         }
     }

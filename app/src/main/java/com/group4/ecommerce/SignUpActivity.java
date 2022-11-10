@@ -1,5 +1,7 @@
 package com.group4.ecommerce;
 
+import static java.lang.String.valueOf;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +33,6 @@ public class SignUpActivity extends AppCompatActivity {
     StorageReference storageReference;
     Button bSignUp;
     EditText email,password,phone;
-    boolean checkEmail;
     List<String> lemail= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,50 +52,67 @@ public class SignUpActivity extends AppCompatActivity {
         bSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mail=email.getText().toString().replaceAll("\\s+","");;
+                bSignUp.setEnabled(false);
+                String mail=email.getText().toString().replaceAll("\\s+","").toLowerCase();
                 String pw=password.getText().toString();
                 String ph=phone.getText().toString();
+                if(password.length()<=5){
+                    Toast.makeText(SignUpActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
+                    bSignUp.setEnabled(true);
+                }
+                else if(mail.isEmpty()||pw.isEmpty()||ph.isEmpty()) {
+                    Toast.makeText(SignUpActivity.this,"Please Input Your Email and Password",Toast.LENGTH_SHORT).show();
+                    bSignUp.setEnabled(true);
+                }
+                if(!mail.isEmpty() && !pw.isEmpty()&& !ph.isEmpty()){
+                    signup(mail,pw,ph);
 
-                if(!mail.isEmpty() && !pw.isEmpty()&& !ph.isEmpty()) signup(mail,pw,ph);
-                else if(password.length()<=5) Toast.makeText(SignUpActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
-                else Toast.makeText(SignUpActivity.this,"Please Input Your Email and Password",Toast.LENGTH_SHORT).show();
-
-
+                }
             }
         });
     }
 
     public void signup(String email,String password, String phone){
-
-//        register untuk user
-        reference.child("Auth").addValueEventListener(new ValueEventListener() {
+        UUID randomId= UUID.randomUUID();
+        reference.child("Auth").orderByChild("email").equalTo(email)
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot keys:snapshot.getChildren()){
+                Auth auth=snapshot.getValue(Auth.class);
+                if(!snapshot.exists()){
+                    lemail.clear();
+                    createUser(randomId.toString(),email,password,phone);
+                }else if(snapshot.exists()){
+                    Log.i("size lama",valueOf(lemail.size()));
 
-                    Auth auth=keys.getValue(Auth.class);
-                    lemail.add(auth.getEmail().toString());
-                }
-                Log.i("auth",lemail.toString());
-                if(!lemail.contains(email)){
-                    UUID randomId= UUID.randomUUID();
-                    reference.child("Auth").child(randomId.toString()).child("id").setValue(randomId.toString());
-                    reference.child("Auth").child(randomId.toString()).child("email").setValue(email);
-                    reference.child("Auth").child(randomId.toString()).child("password").setValue(password);
-                    reference.child("Auth").child(randomId.toString()).child("phone").setValue(phone);
-                    reference.child("Auth").child(randomId.toString()).child("role").setValue("user");
-                    Intent i= new Intent(SignUpActivity.this,WelcomeActivity.class);
-                    startActivity(i);
-                }else{
-                    Toast.makeText(SignUpActivity.this,"email sudah terpakai.",Toast.LENGTH_LONG).show();
-                    return;
+                    lemail.add(auth.getEmail());
+                    Log.i("size",valueOf(lemail.size()));
+
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                bSignUp.setEnabled(true);
             }
         });
+        int size=lemail.size();
+        if(size>0){
+            Toast.makeText(SignUpActivity.this, "email telah dipakai", Toast.LENGTH_SHORT).show();
+            bSignUp.setEnabled(true);
+        }
+
+
+
+    }
+    public void createUser(String randomId,String email,String password,String phone){
+        reference.child("Auth").child(randomId).child("id").setValue(randomId);
+        reference.child("Auth").child(randomId).child("email").setValue(email);
+        reference.child("Auth").child(randomId).child("password").setValue(password);
+        reference.child("Auth").child(randomId).child("phone").setValue(phone);
+        reference.child("Auth").child(randomId).child("role").setValue("user");
+        Intent i= new Intent(SignUpActivity.this,WelcomeActivity.class);
+        startActivity(i);
 
     }
 }

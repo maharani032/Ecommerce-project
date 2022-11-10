@@ -74,7 +74,8 @@ about.setOnClickListener(new View.OnClickListener() {
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email=inputEmail.getText().toString().replaceAll("\\s+","");
+                buttonSignIn.setEnabled(false);
+                String email=inputEmail.getText().toString().replaceAll("\\s+","").toLowerCase();
                 String password=inputPassword.getText().toString();
                 if(!email.isEmpty() && !password.isEmpty()) signIn(email,password);
                 else if(password.length()<=5) Toast.makeText(WelcomeActivity.this,"Minimum length of password",Toast.LENGTH_SHORT).show();
@@ -98,12 +99,16 @@ about.setOnClickListener(new View.OnClickListener() {
                 }else if(!snapshot.exists()){
                     Toast.makeText(WelcomeActivity.this,"email tidak terdaftar",Toast.LENGTH_SHORT).show();
                     pb.setVisibility(View.INVISIBLE);
+                    buttonSignIn.setEnabled(true);
+
+
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                buttonSignIn.setEnabled(true);
+                pb.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -141,6 +146,8 @@ about.setOnClickListener(new View.OnClickListener() {
                 }
                 else {
                     Toast.makeText(WelcomeActivity.this,"password salah",Toast.LENGTH_SHORT).show();
+                    buttonSignIn.setEnabled(true);
+                    pb.setVisibility(View.INVISIBLE);
                 }
             }
 
